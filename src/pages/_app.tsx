@@ -9,7 +9,7 @@ const urqlClient = createClient({
   },
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={urqlClient}>
       <ChakraProvider resetCSS theme={theme}>
