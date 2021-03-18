@@ -1,0 +1,5 @@
+fragment BasicUser on User {
+  id
+  username
+  avatarId
+}
