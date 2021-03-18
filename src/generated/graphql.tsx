@@ -17,22 +17,23 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
-  posts: Array<Post>;
-  post?: Maybe<Post>;
+  movies: Array<Movie>;
+  movie?: Maybe<Movie>;
   me?: Maybe<User>;
 };
 
 
-export type QueryPostArgs = {
+export type QueryMovieArgs = {
   id: Scalars['Float'];
 };
 
-export type Post = {
-  __typename?: 'Post';
+export type Movie = {
+  __typename?: 'Movie';
   id: Scalars['Int'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
+  imageLink: Scalars['String'];
 };
 
 export type User = {
@@ -46,26 +47,28 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createPost: Post;
-  updatePost?: Maybe<Post>;
-  deletePost: Scalars['Boolean'];
+  createMovie: Movie;
+  updateMovie?: Maybe<Movie>;
+  deleteMovie: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
 };
 
 
-export type MutationCreatePostArgs = {
+export type MutationCreateMovieArgs = {
+  imageLink: Scalars['String'];
   title: Scalars['String'];
 };
 
 
-export type MutationUpdatePostArgs = {
+export type MutationUpdateMovieArgs = {
+  imageLink?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
 };
 
 
-export type MutationDeletePostArgs = {
+export type MutationDeleteMovieArgs = {
   id: Scalars['Float'];
 };
 
@@ -97,6 +100,25 @@ export type UsernamePasswordInput = {
   password: Scalars['String'];
 };
 
+export type LoginMutationVariables = Exact<{
+  authinfo: UsernamePasswordInput;
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'createdAt' | 'updatedAt' | 'avatarId'>
+    )> }
+  ) }
+);
+
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -119,6 +141,26 @@ export type RegisterMutation = (
 );
 
 
+export const LoginDocument = gql`
+    mutation Login($authinfo: UsernamePasswordInput!) {
+  login(authinfo: $authinfo) {
+    errors {
+      field
+      message
+    }
+    user {
+      username
+      createdAt
+      updatedAt
+      avatarId
+    }
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($username: String!, $password: String!, $avatarid: Int!) {
   register(
