@@ -1,0 +1,9 @@
+query Movies {
+  movies {
+    id
+    title
+    imageLink
+    createdAt
+    updatedAt
+  }
+}

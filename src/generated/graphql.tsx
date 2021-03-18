@@ -165,6 +165,17 @@ export type MeQuery = (
   )> }
 );
 
+export type MoviesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MoviesQuery = (
+  { __typename?: 'Query' }
+  & { movies: Array<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'title' | 'imageLink' | 'createdAt' | 'updatedAt'>
+  )> }
+);
+
 export const BasicUserFragmentDoc = gql`
     fragment BasicUser on User {
   id
@@ -228,4 +239,19 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MoviesDocument = gql`
+    query Movies {
+  movies {
+    id
+    title
+    imageLink
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useMoviesQuery(options: Omit<Urql.UseQueryArgs<MoviesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MoviesQuery>({ query: MoviesDocument, ...options });
 };
