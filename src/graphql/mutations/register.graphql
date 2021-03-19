@@ -1,14 +1,13 @@
-mutation Register($username: String!, $password: String!, $avatarid: Int!) {
+mutation Register(
+  $username: String!
+  $password: String!
+  $email: String!
+  $avatarid: Int!
+) {
   register(
-    authinfo: { username: $username, password: $password }
+    authinfo: { username: $username, password: $password, email: $email }
     avatarid: $avatarid
   ) {
-    errors {
-      field
-      message
-    }
-    user {
-      ...BasicUser
-    }
+    ...BasicUserResponse
   }
 }

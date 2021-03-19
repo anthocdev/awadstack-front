@@ -1,11 +1,5 @@
-mutation Login($authinfo: UsernamePasswordInput!) {
-  login(authinfo: $authinfo) {
-    errors {
-      field
-      message
-    }
-    user {
-      ...BasicUser
-    }
+mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(usernameOrEmail: $usernameOrEmail, password: $password) {
+    ...BasicUserResponse
   }
 }
