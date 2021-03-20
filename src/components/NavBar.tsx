@@ -31,7 +31,17 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        <Box mr={2}>{data.me.username}</Box>
+        {data.me.accessLevel === 1 ? (
+          <NextLink href="/new-movie">
+            <Link mr={2}>New Movie</Link>
+          </NextLink>
+        ) : null}
+        <Box
+          mr={2}
+          color={data.me.accessLevel === 1 ? "khaki" : "blackAlpha.500"}
+        >
+          {data.me.username}
+        </Box>
         <Button
           onClick={() => {
             logout();
@@ -45,7 +55,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   }
   return (
-    <Flex bg="twitter.400" p={4}>
+    <Flex position="sticky" top={0} zIndex={1} bg="twitter.400" p={4}>
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );

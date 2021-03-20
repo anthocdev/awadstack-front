@@ -1,0 +1,8 @@
+fragment BasicMovie on Movie {
+  id
+  title
+  imdbId
+  imageLink
+  updatedAt
+  createdAt
+}

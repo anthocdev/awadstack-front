@@ -1,0 +1,5 @@
+mutation CreateMovie($title: String!, $imdbId: String!, $imageLink: String!) {
+  createMovie(title: $title, imdbId: $imdbId, imageLink: $imageLink) {
+    ...BasicMovie
+  }
+}
