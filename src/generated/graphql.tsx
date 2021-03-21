@@ -17,7 +17,7 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
-  movies: Array<Movie>;
+  movies: PaginatedMovies;
   movie?: Maybe<Movie>;
   me?: Maybe<User>;
   comments: Array<UserComment>;
@@ -38,6 +38,12 @@ export type QueryMovieArgs = {
 
 export type QueryCommmentArgs = {
   id: Scalars['Float'];
+};
+
+export type PaginatedMovies = {
+  __typename?: 'PaginatedMovies';
+  movies: Array<Movie>;
+  hasMore: Scalars['Boolean'];
 };
 
 export type Movie = {
@@ -278,10 +284,14 @@ export type MoviesQueryVariables = Exact<{
 
 export type MoviesQuery = (
   { __typename?: 'Query' }
-  & { movies: Array<(
-    { __typename?: 'Movie' }
-    & BasicMovieFragment
-  )> }
+  & { movies: (
+    { __typename?: 'PaginatedMovies' }
+    & Pick<PaginatedMovies, 'hasMore'>
+    & { movies: Array<(
+      { __typename?: 'Movie' }
+      & BasicMovieFragment
+    )> }
+  ) }
 );
 
 export const BasicMovieFragmentDoc = gql`
@@ -397,8 +407,11 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 };
 export const MoviesDocument = gql`
     query Movies($limit: Int!, $cursor: String) {
-  movies(cursor: $cursor, limit: $limit) {
-    ...BasicMovie
+  movies(limit: $limit, cursor: $cursor) {
+    hasMore
+    movies {
+      ...BasicMovie
+    }
   }
 }
     ${BasicMovieFragmentDoc}`;

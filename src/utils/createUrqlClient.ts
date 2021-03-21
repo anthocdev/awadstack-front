@@ -12,6 +12,7 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";
 
 import { pipe, tap } from "wonka";
+import { cursorPagination } from "./cursorPagination";
 
 const errorExchange: Exchange = ({ forward }) => (ops$) => {
   return pipe(
@@ -34,6 +35,14 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      keys: {
+        PaginatedMovies: () => null,
+      },
+      resolvers: {
+        Query: {
+          movies: cursorPagination(),
+        },
+      },
       updates: {
         Mutation: {
           logout: (_result, args, cache, info) => {

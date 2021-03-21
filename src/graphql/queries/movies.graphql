@@ -1,5 +1,8 @@
 query Movies($limit: Int!, $cursor: String) {
-  movies(cursor: $cursor, limit: $limit) {
-    ...BasicMovie
+  movies(limit: $limit, cursor: $cursor) {
+    hasMore
+    movies {
+      ...BasicMovie
+    }
   }
 }
