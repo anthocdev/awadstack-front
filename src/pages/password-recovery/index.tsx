@@ -4,7 +4,7 @@ import { withUrqlClient } from "next-urql";
 import router from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useForgotPasswordMutation } from "../../generated/graphql";
@@ -23,7 +23,7 @@ const PasswordRecovery: React.FC<{}> = ({}) => {
   return (
     <div>
       {showInfo ? infoMessage : null}
-      <Wrapper variant="small">
+      <Wrapper variant={WrapperVariant.small}>
         <Formik
           initialValues={{ email: "" }}
           onSubmit={async (values, { setErrors }) => {

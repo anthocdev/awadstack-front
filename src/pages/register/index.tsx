@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Formik } from "formik";
 import { Box, Button } from "@chakra-ui/react";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { InputField } from "../../components/InputField";
 import { useMutation } from "urql";
 import { useRegisterMutation } from "../../generated/graphql";
@@ -16,7 +16,7 @@ export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
-    <Wrapper variant="small">
+    <Wrapper variant={WrapperVariant.small}>
       <Formik
         initialValues={{ username: "", password: "", email: "", avatarid: 3 }}
         onSubmit={async (values, { setErrors }) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Formik } from "formik";
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { InputField } from "../../components/InputField";
 import { useLoginMutation } from "../../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
@@ -14,7 +14,7 @@ export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <Wrapper variant="small">
+    <Wrapper variant={WrapperVariant.small}>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {

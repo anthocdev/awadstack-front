@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { withUrqlClient } from "next-urql";
 import React, { useEffect } from "react";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { useCreateMovieMutation, useMeQuery } from "../../generated/graphql";
 import { useRouter } from "next/router";
@@ -15,7 +15,7 @@ const NewMovie: React.FC<{}> = ({}) => {
   useIsAuth(); //Authorization check
   const [, createMovie] = useCreateMovieMutation();
   return (
-    <Layout variant="small">
+    <Layout variant={WrapperVariant.small}>
       <Formik
         initialValues={{ title: "", imdbId: "", imageLink: "" }}
         onSubmit={async (values) => {

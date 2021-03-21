@@ -1,5 +1,5 @@
-query Movies {
-  movies {
+query Movies($limit: Int!, $cursor: String) {
+  movies(cursor: $cursor, limit: $limit) {
     ...BasicMovie
   }
 }

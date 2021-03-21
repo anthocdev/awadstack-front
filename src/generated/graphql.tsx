@@ -25,6 +25,12 @@ export type Query = {
 };
 
 
+export type QueryMoviesArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryMovieArgs = {
   id: Scalars['Float'];
 };
@@ -264,7 +270,10 @@ export type MeQuery = (
   )> }
 );
 
-export type MoviesQueryVariables = Exact<{ [key: string]: never; }>;
+export type MoviesQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type MoviesQuery = (
@@ -387,8 +396,8 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const MoviesDocument = gql`
-    query Movies {
-  movies {
+    query Movies($limit: Int!, $cursor: String) {
+  movies(cursor: $cursor, limit: $limit) {
     ...BasicMovie
   }
 }

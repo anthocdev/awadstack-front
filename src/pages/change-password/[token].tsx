@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import { withUrqlClient, NextComponentType } from "next-urql";
 import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useChangePasswordMutation } from "../../generated/graphql";
@@ -20,7 +20,7 @@ const ChangePassword: NextPage<{ token: string }> = () => {
     setCustomError("")
   );
   return (
-    <Wrapper variant="small">
+    <Wrapper variant={WrapperVariant.regular}>
       {customError ? customAlert : null}
       <Formik
         initialValues={{ newPassword: "", confirmPassword: "" }}

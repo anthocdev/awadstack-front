@@ -32,7 +32,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     body = (
       <Flex>
         {data.me.accessLevel === 1 ? (
-          <NextLink href="/new-movie">
+          <NextLink href="/movie/new">
             <Link mr={2}>New Movie</Link>
           </NextLink>
         ) : null}
