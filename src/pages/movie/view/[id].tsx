@@ -8,4 +8,4 @@ const MovieDisp: React.FC<{}> = ({}) => {
   return <div>{router.query.id}</div>;
 };
 
-export default withUrqlClient(createUrqlClient)(MovieDisp);
+export default withUrqlClient(createUrqlClient, { ssr: true })(MovieDisp);

@@ -52,6 +52,9 @@ export type Movie = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
+  year: Scalars['Float'];
+  genre: Scalars['String'];
+  rating: Scalars['Float'];
   imdbId: Scalars['String'];
   imageLink: Scalars['String'];
 };
@@ -169,7 +172,7 @@ export type BasicErrorFragment = (
 
 export type BasicMovieFragment = (
   { __typename?: 'Movie' }
-  & Pick<Movie, 'id' | 'title' | 'imdbId' | 'imageLink' | 'updatedAt' | 'createdAt'>
+  & Pick<Movie, 'id' | 'title' | 'imdbId' | 'imageLink' | 'rating' | 'genre' | 'year' | 'updatedAt' | 'createdAt'>
 );
 
 export type BasicUserFragment = (
@@ -300,6 +303,9 @@ export const BasicMovieFragmentDoc = gql`
   title
   imdbId
   imageLink
+  rating
+  genre
+  year
   updatedAt
   createdAt
 }

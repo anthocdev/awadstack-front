@@ -13,8 +13,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   });
   let body = null;
 
+  console.log("data", data);
+
   /* Loading */
   if (fetching) {
+    console.log(isServer);
     /* User not logged in */
   } else if (!data?.me) {
     body = (

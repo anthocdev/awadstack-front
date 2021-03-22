@@ -13,12 +13,17 @@ const Index = () => {
     limit: 10,
     cursor: null as null | string,
   });
-  const [{ fetching, data }] = useMoviesQuery({
+  const [{ fetching, data, error }] = useMoviesQuery({
     variables,
   });
 
-  if (!fetching && !data) {
-    return <div> No movies listed.</div>;
+  if (!fetching && !data?.movies.movies) {
+    return (
+      <div>
+        {" "}
+        No movies listed or something went horribly wrong. {error?.message}
+      </div>
+    );
   }
 
   return (
@@ -60,4 +65,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default withUrqlClient(createUrqlClient)(Index);

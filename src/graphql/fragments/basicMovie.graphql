@@ -3,6 +3,9 @@ fragment BasicMovie on Movie {
   title
   imdbId
   imageLink
+  rating
+  genre
+  year
   updatedAt
   createdAt
 }
