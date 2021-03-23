@@ -20,7 +20,7 @@ export type Query = {
   movies: PaginatedMovies;
   movie?: Maybe<Movie>;
   me?: Maybe<User>;
-  comments: Array<UserComment>;
+  comments: PaginatedComments;
   commment?: Maybe<UserComment>;
 };
 
@@ -32,7 +32,13 @@ export type QueryMoviesArgs = {
 
 
 export type QueryMovieArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
+};
+
+
+export type QueryCommentsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -57,6 +63,20 @@ export type Movie = {
   rating: Scalars['Float'];
   imdbId: Scalars['String'];
   imageLink: Scalars['String'];
+  comments?: Maybe<Array<UserComment>>;
+};
+
+export type UserComment = {
+  __typename?: 'UserComment';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  body: Scalars['String'];
+  likes: Scalars['Float'];
+  dislikes: Scalars['Float'];
+  userId: Scalars['Float'];
+  movieId: Scalars['Float'];
+  user: User;
 };
 
 export type User = {
@@ -66,19 +86,15 @@ export type User = {
   updatedAt: Scalars['String'];
   avatarId: Scalars['Int'];
   email: Scalars['String'];
+  comments?: Maybe<Array<UserComment>>;
   accessLevel: Scalars['Int'];
   username: Scalars['String'];
 };
 
-export type UserComment = {
-  __typename?: 'UserComment';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  body: Scalars['String'];
-  points: Scalars['Float'];
-  creatorId: Scalars['Float'];
-  movieId: Scalars['Float'];
+export type PaginatedComments = {
+  __typename?: 'PaginatedComments';
+  comments: Array<UserComment>;
+  hasMore: Scalars['Boolean'];
 };
 
 export type Mutation = {
@@ -279,6 +295,27 @@ export type MeQuery = (
   )> }
 );
 
+export type MovieQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MovieQuery = (
+  { __typename?: 'Query' }
+  & { movie?: Maybe<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'year' | 'genre' | 'rating' | 'imdbId' | 'imageLink'>
+    & { comments?: Maybe<Array<(
+      { __typename?: 'UserComment' }
+      & Pick<UserComment, 'id' | 'createdAt' | 'updatedAt' | 'body' | 'likes' | 'dislikes'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      ) }
+    )>> }
+  )> }
+);
+
 export type MoviesQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
@@ -410,6 +447,37 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MovieDocument = gql`
+    query Movie($id: Int!) {
+  movie(id: $id) {
+    id
+    createdAt
+    updatedAt
+    title
+    year
+    genre
+    rating
+    imdbId
+    imageLink
+    comments {
+      id
+      createdAt
+      updatedAt
+      body
+      likes
+      dislikes
+      user {
+        id
+        username
+      }
+    }
+  }
+}
+    `;
+
+export function useMovieQuery(options: Omit<Urql.UseQueryArgs<MovieQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MovieQuery>({ query: MovieDocument, ...options });
 };
 export const MoviesDocument = gql`
     query Movies($limit: Int!, $cursor: String) {
