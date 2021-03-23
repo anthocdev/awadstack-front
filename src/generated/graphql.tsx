@@ -310,7 +310,7 @@ export type MovieQuery = (
       & Pick<UserComment, 'id' | 'createdAt' | 'updatedAt' | 'body' | 'likes' | 'dislikes'>
       & { user: (
         { __typename?: 'User' }
-        & Pick<User, 'id' | 'username'>
+        & BasicUserFragment
       ) }
     )>> }
   )> }
@@ -468,13 +468,12 @@ export const MovieDocument = gql`
       likes
       dislikes
       user {
-        id
-        username
+        ...BasicUser
       }
     }
   }
 }
-    `;
+    ${BasicUserFragmentDoc}`;
 
 export function useMovieQuery(options: Omit<Urql.UseQueryArgs<MovieQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MovieQuery>({ query: MovieDocument, ...options });

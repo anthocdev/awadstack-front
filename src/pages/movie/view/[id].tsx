@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
-import { useMovieQuery } from "../../../generated/graphql";
+import { useMeQuery, useMovieQuery } from "../../../generated/graphql";
 import { Layout } from "../../../components/Layout";
 import { StarIcon, CalendarIcon } from "@chakra-ui/icons";
 import {
@@ -18,6 +18,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Comment } from "../../../components/Comment";
+import { isServer } from "../../../utils/isServer";
 
 interface DetailProps {
   text: string | undefined;
@@ -47,6 +48,10 @@ const Detail = ({ text, heading, icon, iconBg }: DetailProps) => {
 
 const MovieDisp: React.FC<{}> = ({}) => {
   const router = useRouter();
+  const [{ data: meData, fetching: meFetching }] = useMeQuery({
+    pause: isServer(),
+  });
+
   const intId =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
   const [{ data, error, fetching }] = useMovieQuery({
@@ -56,7 +61,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
     },
   });
 
-  if (fetching) {
+  if (fetching || meFetching) {
     return (
       <Layout>
         <div>loading...</div>
@@ -124,7 +129,6 @@ const MovieDisp: React.FC<{}> = ({}) => {
         </SimpleGrid>
       </Container>
       {/* Comment Container */}
-
       <Container maxW={"4xl"} py={12}>
         <Heading>Comments</Heading>
         {!data?.movie?.comments && !fetching ? (
@@ -132,10 +136,10 @@ const MovieDisp: React.FC<{}> = ({}) => {
         ) : (
           data?.movie?.comments!.map((comment) => {
             console.log("KOMENT", comment);
-            return <Comment comment={comment} />;
+            return <Comment comment={comment} userId={meData?.me?.id} />;
           })
         )}
-        {}
+        {/* Comment Input */}
       </Container>
     </Layout>
   );
