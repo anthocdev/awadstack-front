@@ -2,7 +2,11 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
-import { useMeQuery, useMovieQuery } from "../../../generated/graphql";
+import {
+  useCreateCommentMutation,
+  useMeQuery,
+  useMovieQuery,
+} from "../../../generated/graphql";
 import { Layout } from "../../../components/Layout";
 import { StarIcon, CalendarIcon } from "@chakra-ui/icons";
 import {
@@ -16,9 +20,12 @@ import {
   Icon,
   Flex,
   Text,
+  Button,
 } from "@chakra-ui/react";
 import { Comment } from "../../../components/Comment";
 import { isServer } from "../../../utils/isServer";
+import { TextAreaField } from "../../../components/TextAreaField";
+import { Form, Formik } from "formik";
 
 interface DetailProps {
   text: string | undefined;
@@ -48,6 +55,7 @@ const Detail = ({ text, heading, icon, iconBg }: DetailProps) => {
 
 const MovieDisp: React.FC<{}> = ({}) => {
   const router = useRouter();
+  const [, createComment] = useCreateCommentMutation();
   const [{ data: meData, fetching: meFetching }] = useMeQuery({
     pause: isServer(),
   });
@@ -131,15 +139,58 @@ const MovieDisp: React.FC<{}> = ({}) => {
       {/* Comment Container */}
       <Container maxW={"4xl"} py={12}>
         <Heading>Comments</Heading>
-        {!data?.movie?.comments && !fetching ? (
-          <div>No comments yet, be first to comment.</div>
+        {!data?.movie?.comments?.length && !fetching ? (
+          <Container mt={6}>No comments available.</Container>
         ) : (
           data?.movie?.comments!.map((comment) => {
-            console.log("KOMENT", comment);
             return <Comment comment={comment} userId={meData?.me?.id} />;
           })
         )}
         {/* Comment Input */}
+      </Container>
+      <Container maxW={"4x1"} py={6}>
+        <Heading size="lg">Leave a Comment</Heading>
+        <Formik
+          initialValues={{ body: "", movieId: intId }}
+          onSubmit={async (values, { setErrors }) => {
+            const response = await createComment(values);
+            /*@Todo more validation */
+            // if (response.data?.login.errors) {
+            //   setErrors(toErrorMap(response.data.createComment.errors));
+            // } else if (response.data?.login.user) {
+            //   /*Successful login */
+            //   if (typeof router.query.next === "string") {
+            //     /* Push to history */
+            //     router.push(router.query.next);
+            //   } else {
+            //     router.push("/");
+            //   }
+            // }
+            if (response.data?.createComment.id) {
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <TextAreaField
+                name="body"
+                placeholder="comment"
+                label="Comment"
+              />
+              <Flex>
+                <Button
+                  mt={4}
+                  isLoading={isSubmitting}
+                  type="submit"
+                  color="twitter.700"
+                  background="twitter.100"
+                >
+                  Submit
+                </Button>
+              </Flex>
+            </Form>
+          )}
+        </Formik>
       </Container>
     </Layout>
   );

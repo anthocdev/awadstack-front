@@ -4,7 +4,7 @@
 
 **Modifications**
 
-- Using chakra alerts, skeleton and grids
+- Using many other chakraUI elements
 - Repurposed to a movie DB with option to comment
 - Different behaviour for higher access level users
 - Component and Method structures

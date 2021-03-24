@@ -29,7 +29,10 @@ export const MovieCard: React.FC<MovieProps> = ({ movie }) => {
     >
       <Box d="flex" justifyContent="center">
         <Skeleton isLoaded>
-          <Image src={movie.imageLink} fallback={<>No Image</>} />
+          <Image
+            src={movie.imageLink}
+            fallbackSrc="https://i.giphy.com/media/26xBIygOcC3bAWg3S/giphy.webp"
+          />
         </Skeleton>
       </Box>
 

@@ -155,7 +155,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateCommentArgs = {
-  movieId: Scalars['Float'];
+  movieId: Scalars['Int'];
   input: CommentInput;
 };
 
@@ -180,6 +180,11 @@ export type UsernamePasswordInput = {
 export type CommentInput = {
   body: Scalars['String'];
 };
+
+export type BasicCommentFragment = (
+  { __typename?: 'UserComment' }
+  & Pick<UserComment, 'id' | 'body' | 'likes' | 'dislikes' | 'userId' | 'movieId' | 'createdAt' | 'updatedAt'>
+);
 
 export type BasicErrorFragment = (
   { __typename?: 'FieldError' }
@@ -218,6 +223,20 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & BasicUserResponseFragment
+  ) }
+);
+
+export type CreateCommentMutationVariables = Exact<{
+  body: Scalars['String'];
+  movieId: Scalars['Int'];
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'UserComment' }
+    & BasicCommentFragment
   ) }
 );
 
@@ -334,6 +353,18 @@ export type MoviesQuery = (
   ) }
 );
 
+export const BasicCommentFragmentDoc = gql`
+    fragment BasicComment on UserComment {
+  id
+  body
+  likes
+  dislikes
+  userId
+  movieId
+  createdAt
+  updatedAt
+}
+    `;
 export const BasicMovieFragmentDoc = gql`
     fragment BasicMovie on Movie {
   id
@@ -382,6 +413,17 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateCommentDocument = gql`
+    mutation CreateComment($body: String!, $movieId: Int!) {
+  createComment(movieId: $movieId, input: {body: $body}) {
+    ...BasicComment
+  }
+}
+    ${BasicCommentFragmentDoc}`;
+
+export function useCreateCommentMutation() {
+  return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
 };
 export const CreateMovieDocument = gql`
     mutation CreateMovie($title: String!, $imdbId: String!, $imageLink: String!) {

@@ -1,0 +1,5 @@
+mutation CreateComment($body: String!, $movieId: Int!) {
+  createComment(movieId: $movieId, input: { body: $body }) {
+    ...BasicComment
+  }
+}

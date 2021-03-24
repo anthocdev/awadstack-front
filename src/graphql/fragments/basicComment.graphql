@@ -1,0 +1,10 @@
+fragment BasicComment on UserComment {
+  id
+  body
+  likes
+  dislikes
+  userId
+  movieId
+  createdAt
+  updatedAt
+}
