@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Heading, Link } from "@chakra-ui/react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import React from "react";
 import NextLink from "next/link";
@@ -39,12 +39,14 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             <Link mr={2}>New Movie</Link>
           </NextLink>
         ) : null}
-        <Box
+        <Badge
           mr={2}
-          color={data.me.accessLevel === 1 ? "khaki" : "blackAlpha.500"}
+          background="none"
+          color={data.me.accessLevel === 1 ? "red.600" : "blackAlpha.500"}
+          fontSize="1em"
         >
           {data.me.username}
-        </Box>
+        </Badge>
         <Button
           onClick={() => {
             logout();
@@ -59,6 +61,20 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   }
   return (
     <Flex position="sticky" top={0} zIndex={1} bg="twitter.400" p={4}>
+      <Flex>
+        {/* Heading (Logo?) */}
+        <NextLink href="/">
+          <Heading
+            _hover={{ textDecoration: "none" }}
+            as={Link}
+            size="md"
+            mr={2}
+          >
+            Filmd
+          </Heading>
+        </NextLink>
+        {/* Navigation */}
+      </Flex>
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );

@@ -132,6 +132,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
               rounded={"md"}
               alt={"feature image"}
               src={data?.movie?.imageLink}
+              fallbackSrc="https://i.giphy.com/media/26xBIygOcC3bAWg3S/giphy.webp"
             />
           </Flex>
         </SimpleGrid>
@@ -148,7 +149,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
         )}
         {/* Comment Input */}
       </Container>
-      <Container maxW={"4x1"} py={6}>
+      <Container maxW="55em" py={6}>
         <Heading size="lg">Leave a Comment</Heading>
         <Formik
           initialValues={{ body: "", movieId: intId }}
@@ -167,6 +168,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
             //   }
             // }
             if (response.data?.createComment.id) {
+              /* Logic to update comments/refetch or cache */
             }
           }}
         >
