@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
 import {
+  useCommentsQuery,
   useCreateCommentMutation,
   useMeQuery,
   useMovieQuery,
@@ -62,10 +63,20 @@ const MovieDisp: React.FC<{}> = ({}) => {
 
   const intId =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+
   const [{ data, error, fetching }] = useMovieQuery({
     pause: intId === -1,
     variables: {
       id: intId,
+    },
+  });
+
+  const [
+    { data: commentsData, fetching: commentsFetching, error: commentsError },
+  ] = useCommentsQuery({
+    variables: {
+      limit: 10,
+      movieId: intId,
     },
   });
 
@@ -140,10 +151,10 @@ const MovieDisp: React.FC<{}> = ({}) => {
       {/* Comment Container */}
       <Container maxW={"4xl"} py={12}>
         <Heading>Comments</Heading>
-        {!data?.movie?.comments?.length && !fetching ? (
+        {!commentsData?.comments.comments.length && !commentsFetching ? (
           <Container mt={6}>No comments available.</Container>
         ) : (
-          data?.movie?.comments!.map((comment) => {
+          commentsData?.comments.comments.map((comment) => {
             return <Comment comment={comment} userId={meData?.me?.id} />;
           })
         )}

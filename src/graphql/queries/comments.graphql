@@ -1,0 +1,8 @@
+query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
+  comments(movieId: $movieId, limit: $limit, cursor: $cursor) {
+    comments {
+      ...BasicComment
+    }
+    hasMore
+  }
+}

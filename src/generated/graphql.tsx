@@ -20,6 +20,7 @@ export type Query = {
   movies: PaginatedMovies;
   movie?: Maybe<Movie>;
   me?: Maybe<User>;
+  testComments: Array<UserComment>;
   comments: PaginatedComments;
   commment?: Maybe<UserComment>;
 };
@@ -39,6 +40,7 @@ export type QueryMovieArgs = {
 export type QueryCommentsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
+  movieId: Scalars['Int'];
 };
 
 
@@ -77,6 +79,8 @@ export type UserComment = {
   userId: Scalars['Float'];
   movieId: Scalars['Float'];
   user: User;
+  movie: Movie;
+  ratings?: Maybe<Array<UserRating>>;
 };
 
 export type User = {
@@ -86,9 +90,21 @@ export type User = {
   updatedAt: Scalars['String'];
   avatarId: Scalars['Int'];
   email: Scalars['String'];
-  comments?: Maybe<Array<UserComment>>;
   accessLevel: Scalars['Int'];
   username: Scalars['String'];
+  comments?: Maybe<Array<UserComment>>;
+  ratings?: Maybe<Array<UserRating>>;
+};
+
+export type UserRating = {
+  __typename?: 'UserRating';
+  id: Scalars['Float'];
+  commentId: Scalars['Float'];
+  voterId: Scalars['Float'];
+  rating: Scalars['Boolean'];
+  comment: UserComment;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type PaginatedComments = {
@@ -184,6 +200,10 @@ export type CommentInput = {
 export type BasicCommentFragment = (
   { __typename?: 'UserComment' }
   & Pick<UserComment, 'id' | 'body' | 'likes' | 'dislikes' | 'userId' | 'movieId' | 'createdAt' | 'updatedAt'>
+  & { user: (
+    { __typename?: 'User' }
+    & BasicUserFragment
+  ) }
 );
 
 export type BasicErrorFragment = (
@@ -303,6 +323,25 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CommentsQueryVariables = Exact<{
+  movieId: Scalars['Int'];
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CommentsQuery = (
+  { __typename?: 'Query' }
+  & { comments: (
+    { __typename?: 'PaginatedComments' }
+    & Pick<PaginatedComments, 'hasMore'>
+    & { comments: Array<(
+      { __typename?: 'UserComment' }
+      & BasicCommentFragment
+    )> }
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -353,6 +392,14 @@ export type MoviesQuery = (
   ) }
 );
 
+export const BasicUserFragmentDoc = gql`
+    fragment BasicUser on User {
+  id
+  accessLevel
+  username
+  avatarId
+}
+    `;
 export const BasicCommentFragmentDoc = gql`
     fragment BasicComment on UserComment {
   id
@@ -363,8 +410,11 @@ export const BasicCommentFragmentDoc = gql`
   movieId
   createdAt
   updatedAt
+  user {
+    ...BasicUser
+  }
 }
-    `;
+    ${BasicUserFragmentDoc}`;
 export const BasicMovieFragmentDoc = gql`
     fragment BasicMovie on Movie {
   id
@@ -382,14 +432,6 @@ export const BasicErrorFragmentDoc = gql`
     fragment BasicError on FieldError {
   field
   message
-}
-    `;
-export const BasicUserFragmentDoc = gql`
-    fragment BasicUser on User {
-  id
-  accessLevel
-  username
-  avatarId
 }
     `;
 export const BasicUserResponseFragmentDoc = gql`
@@ -478,6 +520,20 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const CommentsDocument = gql`
+    query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
+  comments(movieId: $movieId, limit: $limit, cursor: $cursor) {
+    comments {
+      ...BasicComment
+    }
+    hasMore
+  }
+}
+    ${BasicCommentFragmentDoc}`;
+
+export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
