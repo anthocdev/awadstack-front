@@ -1,4 +1,4 @@
-import { dedupExchange, fetchExchange } from "@urql/core";
+import { dedupExchange, fetchExchange, gql } from "@urql/core";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import { Exchange } from "urql";
 import {
@@ -7,6 +7,7 @@ import {
   MeDocument,
   LoginMutation,
   RegisterMutation,
+  LeaveRatingMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";

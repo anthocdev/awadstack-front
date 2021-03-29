@@ -1,0 +1,10 @@
+mutation LeaveRating($commentId: Int!, $isLike: Boolean!) {
+  leaveRating(commentId: $commentId, isLike: $isLike) {
+    updatedComment {
+      id
+      likes
+      dislikes
+    }
+    error
+  }
+}

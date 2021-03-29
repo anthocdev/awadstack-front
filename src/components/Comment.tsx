@@ -1,6 +1,20 @@
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
-import { HStack, Text, Box, Icon, VStack, Flex, Badge } from "@chakra-ui/react";
+import {
+  HStack,
+  Text,
+  Box,
+  Icon,
+  VStack,
+  Flex,
+  Badge,
+  IconButton,
+} from "@chakra-ui/react";
 import React from "react";
+import {
+  Exact,
+  LeaveRatingMutation,
+  LeaveRatingMutationVariables,
+} from "../generated/graphql";
 
 interface CommentProps {
   comment: {
@@ -16,6 +30,7 @@ interface CommentProps {
     };
   };
   userId: number | undefined;
+  voteFunc: any;
 }
 
 /* Badges based on access levels */
@@ -50,7 +65,11 @@ const badge = (owner: boolean, accessLevel: number) => {
   }
 };
 
-export const Comment: React.FC<CommentProps> = ({ comment, userId }) => {
+export const Comment: React.FC<CommentProps> = ({
+  comment,
+  userId,
+  voteFunc,
+}) => {
   const isOwner = comment.user.id === userId;
   return (
     <div>
@@ -66,15 +85,36 @@ export const Comment: React.FC<CommentProps> = ({ comment, userId }) => {
             </Text>
             {badge(isOwner, comment.user.accessLevel)}
           </Flex>
-
           <Text color={"gray.600"}>{comment.body}</Text>
           <Flex>
-            <Badge colorScheme="green" mr={2}>
-              {comment.likes} <Icon as={ArrowUpIcon} />
-            </Badge>
-            <Badge colorScheme="red">
-              {comment.dislikes} <Icon as={ArrowDownIcon} />
-            </Badge>
+            <Box mr={2}>
+              {comment.likes}
+              <IconButton
+                ml={1}
+                variant="solid"
+                onClick={() =>
+                  voteFunc({ commentId: comment.id, isLike: true })
+                }
+                colorScheme="green"
+                aria-label="Like"
+                size="xs"
+                icon={<ArrowUpIcon />}
+              />
+            </Box>
+            <Box>
+              {comment.dislikes}
+              <IconButton
+                ml={1}
+                variant="solid"
+                onClick={() =>
+                  voteFunc({ commentId: comment.id, isLike: false })
+                }
+                colorScheme="red"
+                aria-label="Like"
+                size="xs"
+                icon={<ArrowDownIcon />}
+              />
+            </Box>
           </Flex>
         </VStack>
       </HStack>

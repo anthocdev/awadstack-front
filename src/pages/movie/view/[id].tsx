@@ -5,6 +5,7 @@ import { createUrqlClient } from "../../../utils/createUrqlClient";
 import {
   useCommentsQuery,
   useCreateCommentMutation,
+  useLeaveRatingMutation,
   useMeQuery,
   useMovieQuery,
 } from "../../../generated/graphql";
@@ -57,6 +58,7 @@ const Detail = ({ text, heading, icon, iconBg }: DetailProps) => {
 const MovieDisp: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, createComment] = useCreateCommentMutation();
+  const [, leaveRating] = useLeaveRatingMutation();
   const [{ data: meData, fetching: meFetching }] = useMeQuery({
     pause: isServer(),
   });
@@ -155,7 +157,13 @@ const MovieDisp: React.FC<{}> = ({}) => {
           <Container mt={6}>No comments available.</Container>
         ) : (
           commentsData?.comments.comments.map((comment) => {
-            return <Comment comment={comment} userId={meData?.me?.id} />;
+            return (
+              <Comment
+                voteFunc={leaveRating}
+                comment={comment}
+                userId={meData?.me?.id}
+              />
+            );
           })
         )}
         {/* Comment Input */}

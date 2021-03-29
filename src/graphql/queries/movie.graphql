@@ -1,24 +1,5 @@
 query Movie($id: Int!) {
   movie(id: $id) {
-    id
-    createdAt
-    updatedAt
-    title
-    year
-    genre
-    rating
-    imdbId
-    imageLink
-    comments {
-      id
-      createdAt
-      updatedAt
-      body
-      likes
-      dislikes
-      user {
-        ...BasicUser
-      }
-    }
+    ...BasicMovie
   }
 }

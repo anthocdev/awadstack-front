@@ -65,7 +65,19 @@ export type Movie = {
   rating: Scalars['Float'];
   imdbId: Scalars['String'];
   imageLink: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  avatarId: Scalars['Int'];
+  email: Scalars['String'];
+  accessLevel: Scalars['Int'];
+  username: Scalars['String'];
   comments?: Maybe<Array<UserComment>>;
+  ratings?: Maybe<Array<UserRating>>;
 };
 
 export type UserComment = {
@@ -80,20 +92,6 @@ export type UserComment = {
   movieId: Scalars['Float'];
   user: User;
   movie: Movie;
-  ratings?: Maybe<Array<UserRating>>;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  avatarId: Scalars['Int'];
-  email: Scalars['String'];
-  accessLevel: Scalars['Int'];
-  username: Scalars['String'];
-  comments?: Maybe<Array<UserComment>>;
-  ratings?: Maybe<Array<UserRating>>;
 };
 
 export type UserRating = {
@@ -124,6 +122,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   createComment: UserComment;
+  leaveRating: RatingResponse;
 };
 
 
@@ -175,6 +174,12 @@ export type MutationCreateCommentArgs = {
   input: CommentInput;
 };
 
+
+export type MutationLeaveRatingArgs = {
+  commentId: Scalars['Int'];
+  isLike: Scalars['Boolean'];
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -195,6 +200,12 @@ export type UsernamePasswordInput = {
 
 export type CommentInput = {
   body: Scalars['String'];
+};
+
+export type RatingResponse = {
+  __typename?: 'RatingResponse';
+  updatedComment?: Maybe<UserComment>;
+  error?: Maybe<Scalars['Boolean']>;
 };
 
 export type BasicCommentFragment = (
@@ -285,6 +296,24 @@ export type ForgotPasswordMutation = (
   & Pick<Mutation, 'forgotPassword'>
 );
 
+export type LeaveRatingMutationVariables = Exact<{
+  commentId: Scalars['Int'];
+  isLike: Scalars['Boolean'];
+}>;
+
+
+export type LeaveRatingMutation = (
+  { __typename?: 'Mutation' }
+  & { leaveRating: (
+    { __typename?: 'RatingResponse' }
+    & Pick<RatingResponse, 'error'>
+    & { updatedComment?: Maybe<(
+      { __typename?: 'UserComment' }
+      & Pick<UserComment, 'id' | 'likes' | 'dislikes'>
+    )> }
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -362,15 +391,7 @@ export type MovieQuery = (
   { __typename?: 'Query' }
   & { movie?: Maybe<(
     { __typename?: 'Movie' }
-    & Pick<Movie, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'year' | 'genre' | 'rating' | 'imdbId' | 'imageLink'>
-    & { comments?: Maybe<Array<(
-      { __typename?: 'UserComment' }
-      & Pick<UserComment, 'id' | 'createdAt' | 'updatedAt' | 'body' | 'likes' | 'dislikes'>
-      & { user: (
-        { __typename?: 'User' }
-        & BasicUserFragment
-      ) }
-    )>> }
+    & BasicMovieFragment
   )> }
 );
 
@@ -487,6 +508,22 @@ export const ForgotPasswordDocument = gql`
 export function useForgotPasswordMutation() {
   return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
 };
+export const LeaveRatingDocument = gql`
+    mutation LeaveRating($commentId: Int!, $isLike: Boolean!) {
+  leaveRating(commentId: $commentId, isLike: $isLike) {
+    updatedComment {
+      id
+      likes
+      dislikes
+    }
+    error
+  }
+}
+    `;
+
+export function useLeaveRatingMutation() {
+  return Urql.useMutation<LeaveRatingMutation, LeaveRatingMutationVariables>(LeaveRatingDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
@@ -549,29 +586,10 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 export const MovieDocument = gql`
     query Movie($id: Int!) {
   movie(id: $id) {
-    id
-    createdAt
-    updatedAt
-    title
-    year
-    genre
-    rating
-    imdbId
-    imageLink
-    comments {
-      id
-      createdAt
-      updatedAt
-      body
-      likes
-      dislikes
-      user {
-        ...BasicUser
-      }
-    }
+    ...BasicMovie
   }
 }
-    ${BasicUserFragmentDoc}`;
+    ${BasicMovieFragmentDoc}`;
 
 export function useMovieQuery(options: Omit<Urql.UseQueryArgs<MovieQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MovieQuery>({ query: MovieDocument, ...options });
