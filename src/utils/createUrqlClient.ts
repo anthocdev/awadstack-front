@@ -7,7 +7,6 @@ import {
   MeDocument,
   LoginMutation,
   RegisterMutation,
-  LeaveRatingMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";
@@ -50,6 +49,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
       cacheExchange({
         keys: {
           PaginatedMovies: () => null,
+          PaginatedComments: () => null,
         },
         resolvers: {
           Query: {
@@ -65,6 +65,18 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                 _result,
                 () => ({ me: null })
               );
+            },
+            /* Invalidating comments cache */
+            createComment: (_result, args, cache, info) => {
+              console.log(cache.inspectFields("Query"));
+              const allFields = cache.inspectFields("Query");
+              const fieldInfos = allFields.filter(
+                (info) => info.fieldName === "comments"
+              );
+              fieldInfos.forEach((fi: any) => {
+                cache.invalidate("Query", "comments", fi.arguments || {});
+              });
+              console.log(cache.inspectFields("Query"));
             },
             login: (_result, args, cache, info) => {
               betterUpdateQuery<LoginMutation, MeQuery>(

@@ -6,7 +6,9 @@ export const cursorPagination = (): Resolver => {
     const { parentKey: entityKey, fieldName } = info;
 
     const allFields = cache.inspectFields(entityKey);
-    const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
+    const fieldInfos = allFields.filter(
+      (info: any) => info.fieldName === fieldName
+    );
     const size = fieldInfos.length;
     if (size === 0) {
       return undefined;
@@ -20,7 +22,7 @@ export const cursorPagination = (): Resolver => {
     info.partial = !inCache;
     let hasMore = true;
     const results: string[] = [];
-    fieldInfos.forEach((fi) => {
+    fieldInfos.forEach((fi: any) => {
       const key = cache.resolve(entityKey, fi.fieldKey) as string;
       const data = cache.resolve(key, "movies") as string[];
       const _hasMore = cache.resolve(key, "hasMore");
