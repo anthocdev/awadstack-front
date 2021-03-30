@@ -3,18 +3,13 @@ import {
   HStack,
   Text,
   Box,
-  Icon,
+  Avatar,
   VStack,
   Flex,
   Badge,
   IconButton,
 } from "@chakra-ui/react";
 import React from "react";
-import {
-  Exact,
-  LeaveRatingMutation,
-  LeaveRatingMutationVariables,
-} from "../generated/graphql";
 
 interface CommentProps {
   comment: {
@@ -24,7 +19,7 @@ interface CommentProps {
     dislikes: number;
     user: {
       username: string;
-      avatarId: number;
+      avatarSvg: string;
       id: number;
       accessLevel: number;
     };
@@ -76,7 +71,11 @@ export const Comment: React.FC<CommentProps> = ({
       <HStack key={comment.id} align={"top"} py={2}>
         <Box color={"green.400"} px={2}>
           {/*Need to implement avatars*/}
-          <Badge colorScheme="twitter">{comment.user.avatarId}</Badge>
+          <Avatar
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+              comment.user.avatarSvg
+            )}`}
+          />
         </Box>
         <VStack align={"start"}>
           <Flex>

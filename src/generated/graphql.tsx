@@ -72,7 +72,7 @@ export type User = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  avatarId: Scalars['Int'];
+  avatarSvg: Scalars['String'];
   email: Scalars['String'];
   accessLevel: Scalars['Int'];
   username: Scalars['String'];
@@ -159,7 +159,6 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationRegisterArgs = {
-  avatarid: Scalars['Int'];
   authinfo: UsernamePasswordInput;
 };
 
@@ -230,7 +229,7 @@ export type BasicMovieFragment = (
 
 export type BasicUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'accessLevel' | 'username' | 'avatarId'>
+  & Pick<User, 'id' | 'accessLevel' | 'username' | 'avatarSvg'>
 );
 
 export type BasicUserResponseFragment = (
@@ -341,7 +340,6 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
   email: Scalars['String'];
-  avatarid: Scalars['Int'];
 }>;
 
 
@@ -419,7 +417,7 @@ export const BasicUserFragmentDoc = gql`
   id
   accessLevel
   username
-  avatarId
+  avatarSvg
 }
     `;
 export const BasicCommentFragmentDoc = gql`
@@ -546,11 +544,8 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $password: String!, $email: String!, $avatarid: Int!) {
-  register(
-    authinfo: {username: $username, password: $password, email: $email}
-    avatarid: $avatarid
-  ) {
+    mutation Register($username: String!, $password: String!, $email: String!) {
+  register(authinfo: {username: $username, password: $password, email: $email}) {
     ...BasicUserResponse
   }
 }

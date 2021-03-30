@@ -1,4 +1,14 @@
-import { Badge, Box, Button, Flex, Heading, Link } from "@chakra-ui/react";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import React from "react";
 import NextLink from "next/link";
@@ -31,34 +41,45 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        {data.me.accessLevel === 1 ? (
-          <NextLink href="/movie/new">
-            <Link mr={2}>New Movie</Link>
-          </NextLink>
-        ) : null}
-        <Badge
-          mr={2}
-          background="none"
-          color={data.me.accessLevel === 1 ? "red.600" : "blackAlpha.500"}
-          fontSize="1em"
-        >
-          {data.me.username}
-        </Badge>
-        <Button
-          onClick={() => {
-            logout();
-          }}
-          variant="link"
-          isLoading={logoutFetching}
-        >
-          Logout
-        </Button>
+        {/* Profile Display */}
+        <Flex mr={2} alignItems="center">
+          <Avatar
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+              data.me.avatarSvg
+            )}`}
+          />
+          <Box ml="3">
+            <Text
+              fontWeight="bold"
+              color={data.me.accessLevel === 1 ? "red.800" : "blackAlpha.900"}
+            >
+              {data.me.username}
+              <Badge
+                ml="1"
+                colorScheme={data.me.accessLevel === 1 ? "red" : "green"}
+              >
+                {data.me.accessLevel === 1 ? "Admin" : "User"}
+              </Badge>
+            </Text>
+          </Box>
+          <Button
+            ml={4}
+            onClick={() => {
+              logout();
+            }}
+            isLoading={logoutFetching}
+            colorScheme="red"
+            backgroundColor="red.900"
+          >
+            Logout
+          </Button>
+        </Flex>
       </Flex>
     );
   }
   return (
     <Flex position="sticky" top={0} zIndex={1} bg="twitter.400" p={4}>
-      <Flex>
+      <Flex alignItems="center">
         {/* Heading (Logo?) */}
         <NextLink href="/">
           <Heading
@@ -71,6 +92,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           </Heading>
         </NextLink>
         {/* Navigation */}
+        {data?.me?.accessLevel === 1 ? (
+          <NextLink href="/movie/new">
+            <Link mr={2}>New Movie</Link>
+          </NextLink>
+        ) : null}
       </Flex>
       <Box ml={"auto"}>{body}</Box>
     </Flex>

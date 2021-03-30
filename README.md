@@ -10,9 +10,10 @@
 - Users can leave comments on movies
 - Component and Method structures
 - Pagination with Caching for Movies & Comments (Separated by Movie)
+- Automatically generated SVG avatars based on username (Using multiavatar)
 
-**Screenshots (Updated)**
+**Screenshots (Will be Updated)**
 
-<img src="./screenshots/scr2.jpg" alt="Movies with pagination" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="400"  />
-
-<img src="./screenshots/scr1.jpg" alt="Single movie w/ Comments pagination" width="400"  />
+<img src="./screenshots/scr3.jpg" alt="Basic profile" width="300"  />
+<img src="./screenshots/scr2.jpg" alt="Movies with pagination" width="600"  />
+<img src="./screenshots/scr1.jpg" alt="Single movie w/ Comments pagination" width="600"  />
