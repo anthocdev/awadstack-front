@@ -12,7 +12,10 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 import Router from "next/router";
 
 import { pipe, tap } from "wonka";
-import { cursorPagination } from "./cursorPagination";
+import {
+  movieCursorPagination,
+  commentCursorPagination,
+} from "./cursorPagination";
 import { isServer } from "./isServer";
 
 const errorExchange: Exchange = ({ forward }) => (ops$) => {
@@ -53,7 +56,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         resolvers: {
           Query: {
-            movies: cursorPagination(),
+            movies: movieCursorPagination(),
+            comments: commentCursorPagination(),
           },
         },
         updates: {

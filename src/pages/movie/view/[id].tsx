@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
@@ -65,6 +65,12 @@ const MovieDisp: React.FC<{}> = ({}) => {
 
   const intId =
     typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  //Comment pagination variables
+  const [variables, setVariables] = useState({
+    limit: 10,
+    cursor: null as null | string,
+    movieId: intId,
+  });
 
   const [{ data, error, fetching }] = useMovieQuery({
     pause: intId === -1,
@@ -76,10 +82,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
   const [
     { data: commentsData, fetching: commentsFetching, error: commentsError },
   ] = useCommentsQuery({
-    variables: {
-      limit: 10,
-      movieId: intId,
-    },
+    variables,
   });
 
   if (fetching || meFetching) {
@@ -156,16 +159,39 @@ const MovieDisp: React.FC<{}> = ({}) => {
         {!commentsData?.comments.comments.length && !commentsFetching ? (
           <Container mt={6}>No comments available.</Container>
         ) : (
-          commentsData?.comments.comments.map((comment) => {
-            return (
-              <Comment
-                voteFunc={leaveRating}
-                comment={comment}
-                userId={meData?.me?.id}
-              />
-            );
+          commentsData?.comments.comments.map((comment: any) => {
+            if (comment.movieId === variables.movieId) {
+              {
+                /* @Todo: more optimal query for matching movieId (cache) */
+              }
+              return (
+                <Comment
+                  voteFunc={leaveRating}
+                  comment={comment}
+                  userId={meData?.me?.id}
+                />
+              );
+            }
           })
         )}
+
+        {commentsData?.comments && commentsData.comments.hasMore ? (
+          <Button
+            onClick={() => {
+              setVariables({
+                limit: variables.limit,
+                movieId: variables.movieId,
+                cursor: commentsData!.comments.comments[
+                  commentsData!.comments.comments.length - 1
+                ].createdAt,
+              });
+            }}
+            alignContent="center"
+            mt={4}
+          >
+            Load More
+          </Button>
+        ) : null}
         {/* Comment Input */}
       </Container>
       <Container maxW="55em" py={6}>
@@ -186,7 +212,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
             //     router.push("/");
             //   }
             // }
-            if (response.data?.createComment.id) {
+            if (response.data?.createComment?.id) {
               /* Logic to update comments/refetch or cache */
             }
           }}

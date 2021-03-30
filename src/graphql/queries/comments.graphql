@@ -4,5 +4,6 @@ query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
       ...BasicComment
     }
     hasMore
+    id
   }
 }

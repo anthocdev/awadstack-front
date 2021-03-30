@@ -86,8 +86,8 @@ export type UserComment = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   body: Scalars['String'];
-  likes: Scalars['Float'];
-  dislikes: Scalars['Float'];
+  likes?: Maybe<Scalars['Float']>;
+  dislikes?: Maybe<Scalars['Float']>;
   userId: Scalars['Float'];
   movieId: Scalars['Float'];
   user: User;
@@ -108,6 +108,7 @@ export type UserRating = {
 export type PaginatedComments = {
   __typename?: 'PaginatedComments';
   comments: Array<UserComment>;
+  id: Scalars['Int'];
   hasMore: Scalars['Boolean'];
 };
 
@@ -121,7 +122,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  createComment: UserComment;
+  createComment?: Maybe<UserComment>;
   leaveRating: RatingResponse;
 };
 
@@ -265,10 +266,10 @@ export type CreateCommentMutationVariables = Exact<{
 
 export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
-  & { createComment: (
+  & { createComment?: Maybe<(
     { __typename?: 'UserComment' }
     & BasicCommentFragment
-  ) }
+  )> }
 );
 
 export type CreateMovieMutationVariables = Exact<{
@@ -363,7 +364,7 @@ export type CommentsQuery = (
   { __typename?: 'Query' }
   & { comments: (
     { __typename?: 'PaginatedComments' }
-    & Pick<PaginatedComments, 'hasMore'>
+    & Pick<PaginatedComments, 'hasMore' | 'id'>
     & { comments: Array<(
       { __typename?: 'UserComment' }
       & BasicCommentFragment
@@ -565,6 +566,7 @@ export const CommentsDocument = gql`
       ...BasicComment
     }
     hasMore
+    id
   }
 }
     ${BasicCommentFragmentDoc}`;
