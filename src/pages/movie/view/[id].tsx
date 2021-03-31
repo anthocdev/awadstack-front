@@ -8,6 +8,7 @@ import {
   useLeaveRatingMutation,
   useMeQuery,
   useMovieQuery,
+  useUpdateCommentMutation,
 } from "../../../generated/graphql";
 import { Layout } from "../../../components/Layout";
 import { StarIcon, CalendarIcon } from "@chakra-ui/icons";
@@ -59,6 +60,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, createComment] = useCreateCommentMutation();
   const [, leaveRating] = useLeaveRatingMutation();
+  const [, updateComment] = useUpdateCommentMutation();
   const [{ data: meData, fetching: meFetching }] = useMeQuery({
     pause: isServer(),
   });
@@ -169,6 +171,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
                   voteFunc={leaveRating}
                   comment={comment}
                   userId={meData?.me?.id}
+                  updateFunc={updateComment}
                 />
               );
             }

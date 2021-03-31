@@ -1,4 +1,10 @@
-import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import {
+  ArrowUpIcon,
+  ArrowDownIcon,
+  CheckIcon,
+  CloseIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 import {
   HStack,
   Text,
@@ -8,6 +14,12 @@ import {
   Flex,
   Badge,
   IconButton,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  useEditableControls,
+  ButtonGroup,
+  Button,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -17,6 +29,8 @@ interface CommentProps {
     body: string;
     likes: number;
     dislikes: number;
+    createdAt: string;
+    updatedAt: string;
     user: {
       username: string;
       avatarSvg: string;
@@ -26,6 +40,7 @@ interface CommentProps {
   };
   userId: number | undefined;
   voteFunc: any;
+  updateFunc: any;
 }
 
 /* Badges based on access levels */
@@ -64,13 +79,83 @@ export const Comment: React.FC<CommentProps> = ({
   comment,
   userId,
   voteFunc,
+  updateFunc,
 }) => {
   const isOwner = comment.user.id === userId;
+  const EditControl = () => {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls();
+
+    return isEditing ? (
+      <ButtonGroup justifyContent="center" size="sm">
+        <IconButton
+          aria-label="confirm"
+          icon={<CheckIcon />}
+          {...getSubmitButtonProps()}
+        />
+        <IconButton
+          aria-label="cancel"
+          icon={<CloseIcon />}
+          {...getCancelButtonProps()}
+        />
+      </ButtonGroup>
+    ) : (
+      <Flex justifyContent="center">
+        <IconButton
+          aria-label="edit"
+          size="sm"
+          icon={<EditIcon />}
+          {...getEditButtonProps()}
+        />
+      </Flex>
+    );
+  };
+
+  const EditComment = (isOwner: boolean) => {
+    return isOwner ? (
+      <Editable
+        colorScheme="twitter"
+        defaultValue={comment.body}
+        onSubmit={async (value) =>
+          await updateFunc({ commentId: comment.id, body: value })
+        }
+        submitOnBlur={false}
+      >
+        <Flex>
+          <EditableInput />
+          <Box mr={2}>
+            <EditablePreview />
+          </Box>
+          <EditControl />
+        </Flex>
+      </Editable>
+    ) : (
+      <Text>{comment.body}</Text>
+    );
+  };
+
+  const DateDisplay = () => {
+    const createdTimestampInt = parseInt(comment.createdAt);
+    const updatedTimestampInt = parseInt(comment.updatedAt);
+    return createdTimestampInt < updatedTimestampInt ? (
+      <Text fontSize="xs">
+        Edited At: {new Date(updatedTimestampInt).toUTCString()}
+      </Text>
+    ) : (
+      <Text fontSize="xs">
+        Created At: {new Date(createdTimestampInt).toUTCString()}
+      </Text>
+    );
+  };
+
   return (
     <div>
       <HStack key={comment.id} align={"top"} py={2}>
         <Box color={"green.400"} px={2}>
-          {/*Need to implement avatars*/}
           <Avatar
             src={`data:image/svg+xml;utf8,${encodeURIComponent(
               comment.user.avatarSvg
@@ -84,7 +169,8 @@ export const Comment: React.FC<CommentProps> = ({
             </Text>
             {badge(isOwner, comment.user.accessLevel)}
           </Flex>
-          <Text color={"gray.600"}>{comment.body}</Text>
+          {EditComment(comment.user.id === userId)}
+          <DateDisplay />
           <Flex>
             <Box mr={2}>
               {comment.likes}

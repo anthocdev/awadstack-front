@@ -123,6 +123,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   createComment?: Maybe<UserComment>;
+  updateComment: CommentResponse;
   leaveRating: RatingResponse;
 };
 
@@ -143,7 +144,7 @@ export type MutationUpdateMovieArgs = {
 
 
 export type MutationDeleteMovieArgs = {
-  id: Scalars['Float'];
+  commentId: Scalars['Float'];
 };
 
 
@@ -175,6 +176,12 @@ export type MutationCreateCommentArgs = {
 };
 
 
+export type MutationUpdateCommentArgs = {
+  input: CommentInput;
+  commentId: Scalars['Int'];
+};
+
+
 export type MutationLeaveRatingArgs = {
   commentId: Scalars['Int'];
   isLike: Scalars['Boolean'];
@@ -200,6 +207,12 @@ export type UsernamePasswordInput = {
 
 export type CommentInput = {
   body: Scalars['String'];
+};
+
+export type CommentResponse = {
+  __typename?: 'CommentResponse';
+  updatedComment?: Maybe<UserComment>;
+  error?: Maybe<Scalars['Boolean']>;
 };
 
 export type RatingResponse = {
@@ -348,6 +361,24 @@ export type RegisterMutation = (
   & { register: (
     { __typename?: 'UserResponse' }
     & BasicUserResponseFragment
+  ) }
+);
+
+export type UpdateCommentMutationVariables = Exact<{
+  commentId: Scalars['Int'];
+  body: Scalars['String'];
+}>;
+
+
+export type UpdateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateComment: (
+    { __typename?: 'CommentResponse' }
+    & Pick<CommentResponse, 'error'>
+    & { updatedComment?: Maybe<(
+      { __typename?: 'UserComment' }
+      & Pick<UserComment, 'id' | 'body' | 'likes' | 'dislikes' | 'updatedAt'>
+    )> }
   ) }
 );
 
@@ -553,6 +584,24 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateCommentDocument = gql`
+    mutation UpdateComment($commentId: Int!, $body: String!) {
+  updateComment(commentId: $commentId, input: {body: $body}) {
+    updatedComment {
+      id
+      body
+      likes
+      dislikes
+      updatedAt
+    }
+    error
+  }
+}
+    `;
+
+export function useUpdateCommentMutation() {
+  return Urql.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument);
 };
 export const CommentsDocument = gql`
     query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
