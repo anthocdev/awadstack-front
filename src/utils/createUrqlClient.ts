@@ -71,6 +71,18 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
               );
             },
             /* Invalidating comments cache */
+            deleteComment: (_result, args, cache, info) => {
+              console.log(cache.inspectFields("Query"));
+              const allFields = cache.inspectFields("Query");
+              const fieldInfos = allFields.filter(
+                (info) => info.fieldName === "comments"
+              );
+              fieldInfos.forEach((fi: any) => {
+                cache.invalidate("Query", "comments", fi.arguments || {});
+              });
+              console.log(cache.inspectFields("Query"));
+            },
+            /* Invalidating comments cache */
             createComment: (_result, args, cache, info) => {
               console.log(cache.inspectFields("Query"));
               const allFields = cache.inspectFields("Query");

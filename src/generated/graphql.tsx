@@ -124,6 +124,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   createComment?: Maybe<UserComment>;
   updateComment: CommentResponse;
+  deleteComment: Scalars['Boolean'];
   leaveRating: RatingResponse;
 };
 
@@ -144,7 +145,7 @@ export type MutationUpdateMovieArgs = {
 
 
 export type MutationDeleteMovieArgs = {
-  commentId: Scalars['Float'];
+  id: Scalars['Float'];
 };
 
 
@@ -178,6 +179,11 @@ export type MutationCreateCommentArgs = {
 
 export type MutationUpdateCommentArgs = {
   input: CommentInput;
+  commentId: Scalars['Int'];
+};
+
+
+export type MutationDeleteCommentArgs = {
   commentId: Scalars['Int'];
 };
 
@@ -362,6 +368,16 @@ export type RegisterMutation = (
     { __typename?: 'UserResponse' }
     & BasicUserResponseFragment
   ) }
+);
+
+export type DeleteCommentMutationVariables = Exact<{
+  commentId: Scalars['Int'];
+}>;
+
+
+export type DeleteCommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteComment'>
 );
 
 export type UpdateCommentMutationVariables = Exact<{
@@ -584,6 +600,15 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($commentId: Int!) {
+  deleteComment(commentId: $commentId)
+}
+    `;
+
+export function useDeleteCommentMutation() {
+  return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
 };
 export const UpdateCommentDocument = gql`
     mutation UpdateComment($commentId: Int!, $body: String!) {

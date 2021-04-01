@@ -3,6 +3,7 @@ import {
   ArrowDownIcon,
   CheckIcon,
   CloseIcon,
+  DeleteIcon,
   EditIcon,
 } from "@chakra-ui/icons";
 import {
@@ -39,8 +40,9 @@ interface CommentProps {
     };
   };
   userId: number | undefined;
-  voteFunc: any;
-  updateFunc: any;
+  voteFunc: any; //Like/dislike comment
+  updateFunc: any; //Edit comment
+  removeFunc: any; //Remove comment
 }
 
 /* Badges based on access levels */
@@ -80,6 +82,7 @@ export const Comment: React.FC<CommentProps> = ({
   userId,
   voteFunc,
   updateFunc,
+  removeFunc,
 }) => {
   const isOwner = comment.user.id === userId;
   const EditControl = () => {
@@ -91,48 +94,62 @@ export const Comment: React.FC<CommentProps> = ({
     } = useEditableControls();
 
     return isEditing ? (
+      /* (Displays whileediting)  */
       <ButtonGroup justifyContent="center" size="sm">
         <IconButton
-          aria-label="confirm"
+          aria-label="confirm-edit"
           icon={<CheckIcon />}
           {...getSubmitButtonProps()}
         />
         <IconButton
-          aria-label="cancel"
+          aria-label="cancel-editing"
           icon={<CloseIcon />}
           {...getCancelButtonProps()}
         />
       </ButtonGroup>
     ) : (
+      /* (Displays while not editing)  */
       <Flex justifyContent="center">
+        {/* Edit Comment */}
         <IconButton
-          aria-label="edit"
+          aria-label="edit-comment"
           size="sm"
           icon={<EditIcon />}
           {...getEditButtonProps()}
+        />
+        {/* Delete comment*/}
+        <IconButton
+          ml={2}
+          size="sm"
+          aria-label="delete-comment"
+          icon={<DeleteIcon />}
+          onClick={() => removeFunc({ commentId: comment.id })}
+          background="red.300"
         />
       </Flex>
     );
   };
 
-  const EditComment = (isOwner: boolean) => {
+  const CommentControls = (isOwner: boolean) => {
     return isOwner ? (
-      <Editable
-        colorScheme="twitter"
-        defaultValue={comment.body}
-        onSubmit={async (value) =>
-          await updateFunc({ commentId: comment.id, body: value })
-        }
-        submitOnBlur={false}
-      >
-        <Flex>
-          <EditableInput />
-          <Box mr={2}>
-            <EditablePreview />
-          </Box>
-          <EditControl />
-        </Flex>
-      </Editable>
+      <Flex>
+        <Editable
+          colorScheme="twitter"
+          defaultValue={comment.body}
+          onSubmit={async (value) =>
+            await updateFunc({ commentId: comment.id, body: value })
+          }
+          submitOnBlur={false}
+        >
+          <Flex>
+            <EditableInput />
+            <Box mr={2}>
+              <EditablePreview />
+            </Box>
+            <EditControl />
+          </Flex>
+        </Editable>
+      </Flex>
     ) : (
       <Text>{comment.body}</Text>
     );
@@ -169,7 +186,7 @@ export const Comment: React.FC<CommentProps> = ({
             </Text>
             {badge(isOwner, comment.user.accessLevel)}
           </Flex>
-          {EditComment(comment.user.id === userId)}
+          {CommentControls(comment.user.id === userId)}
           <DateDisplay />
           <Flex>
             <Box mr={2}>

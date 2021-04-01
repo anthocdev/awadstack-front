@@ -5,6 +5,7 @@ import { createUrqlClient } from "../../../utils/createUrqlClient";
 import {
   useCommentsQuery,
   useCreateCommentMutation,
+  useDeleteCommentMutation,
   useLeaveRatingMutation,
   useMeQuery,
   useMovieQuery,
@@ -61,6 +62,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
   const [, createComment] = useCreateCommentMutation();
   const [, leaveRating] = useLeaveRatingMutation();
   const [, updateComment] = useUpdateCommentMutation();
+  const [, removeComment] = useDeleteCommentMutation();
   const [{ data: meData, fetching: meFetching }] = useMeQuery({
     pause: isServer(),
   });
@@ -172,6 +174,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
                   comment={comment}
                   userId={meData?.me?.id}
                   updateFunc={updateComment}
+                  removeFunc={removeComment}
                 />
               );
             }
