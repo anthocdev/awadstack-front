@@ -20,7 +20,6 @@ export type Query = {
   movies: PaginatedMovies;
   movie?: Maybe<Movie>;
   me?: Maybe<User>;
-  testComments: Array<UserComment>;
   comments: PaginatedComments;
   commment?: Maybe<UserComment>;
 };
@@ -61,6 +60,7 @@ export type Movie = {
   updatedAt: Scalars['String'];
   title: Scalars['String'];
   year: Scalars['Float'];
+  description: Scalars['String'];
   genre: Scalars['String'];
   rating: Scalars['Float'];
   imdbId: Scalars['String'];
@@ -243,7 +243,7 @@ export type BasicErrorFragment = (
 
 export type BasicMovieFragment = (
   { __typename?: 'Movie' }
-  & Pick<Movie, 'id' | 'title' | 'imdbId' | 'imageLink' | 'rating' | 'genre' | 'year' | 'updatedAt' | 'createdAt'>
+  & Pick<Movie, 'id' | 'title' | 'imdbId' | 'description' | 'imageLink' | 'rating' | 'genre' | 'year' | 'updatedAt' | 'createdAt'>
 );
 
 export type BasicUserFragment = (
@@ -487,6 +487,7 @@ export const BasicMovieFragmentDoc = gql`
   id
   title
   imdbId
+  description
   imageLink
   rating
   genre

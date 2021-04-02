@@ -9,7 +9,7 @@ import { useField } from "formik";
 import React, { TextareaHTMLAttributes } from "react";
 
 type TextAreaFieldProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label: string;
+  label?: string;
   name: string;
 };
 

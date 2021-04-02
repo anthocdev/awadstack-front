@@ -25,6 +25,7 @@ import {
   Flex,
   Text,
   Button,
+  Divider,
 } from "@chakra-ui/react";
 import { Comment } from "../../../components/Comment";
 import { isServer } from "../../../utils/isServer";
@@ -120,17 +121,11 @@ const MovieDisp: React.FC<{}> = ({}) => {
               {data?.movie?.genre}
             </Text>
             <Heading>{data?.movie?.title}</Heading>
-            <Text color={"gray.500"} fontSize={"lg"}>
-              No additional info available YET
+            <Divider />
+            <Text pb={4} color={"gray.800"} fontSize={"lg"}>
+              {data?.movie?.description}
             </Text>
-            <Stack
-              spacing={4}
-              divider={
-                <StackDivider
-                  borderColor={useColorModeValue("gray.100", "gray.700")}
-                />
-              }
-            >
+            <Stack spacing={4}>
               <Detail
                 icon={
                   <Icon as={CalendarIcon} color={"twitter.500"} w={5} h={5} />
@@ -225,11 +220,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <TextAreaField
-                name="body"
-                placeholder="comment"
-                label="Comment"
-              />
+              <TextAreaField name="body" placeholder="comment" />
               <Flex>
                 <Button
                   mt={4}

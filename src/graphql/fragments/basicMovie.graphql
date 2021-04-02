@@ -2,6 +2,7 @@ fragment BasicMovie on Movie {
   id
   title
   imdbId
+  description
   imageLink
   rating
   genre
