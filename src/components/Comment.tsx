@@ -23,6 +23,11 @@ import {
   Button,
 } from "@chakra-ui/react";
 import React from "react";
+import {
+  useDeleteCommentMutation,
+  useLeaveRatingMutation,
+  useUpdateCommentMutation,
+} from "../generated/graphql";
 
 interface CommentProps {
   comment: {
@@ -40,9 +45,9 @@ interface CommentProps {
     };
   };
   userId: number | undefined;
-  voteFunc: any; //Like/dislike comment
-  updateFunc: any; //Edit comment
-  removeFunc: any; //Remove comment
+  voteFunc: ReturnType<typeof useLeaveRatingMutation>[1]; //Like/dislike comment
+  updateFunc: ReturnType<typeof useUpdateCommentMutation>[1]; //Edit comment
+  removeFunc: ReturnType<typeof useDeleteCommentMutation>[1]; //Remove comment
 }
 
 /* Badges based on access levels */

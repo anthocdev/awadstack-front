@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Formik } from "formik";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { Wrapper, WrapperVariant } from "../../components/Wrapper";
 import { InputField } from "../../components/InputField";
 import { useLoginMutation } from "../../generated/graphql";
@@ -9,9 +9,11 @@ import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import NextLink from "next/link";
+import { NoticeType } from "../../shared/models/resTypes";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
+  const toast = useToast();
   const [, login] = useLoginMutation();
   return (
     <Wrapper variant={WrapperVariant.small}>
@@ -19,8 +21,23 @@ export const Login: React.FC<{}> = ({}) => {
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await login(values);
-          if (response.data?.login.errors) {
-            setErrors(toErrorMap(response.data.login.errors));
+          /* Response alerts mapping (Toast) */
+          const resAlerts = response.data?.login.alerts;
+          if (resAlerts) {
+            resAlerts.map((alert) => {
+              toast({
+                title: alert.title,
+                status: alert.type as NoticeType,
+                description: alert.message,
+                position: "top",
+                duration: 5000,
+                isClosable: true,
+              });
+            });
+          }
+          if (response.data?.login.fieldErrors) {
+            /* Error messages for fields */
+            setErrors(toErrorMap(response.data.login.fieldErrors));
           } else if (response.data?.login.user) {
             /*Successful login */
             if (typeof router.query.next === "string") {

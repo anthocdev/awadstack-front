@@ -1,0 +1,5 @@
+fragment BasicResAlert on ResAlert {
+  type
+  title
+  message
+}

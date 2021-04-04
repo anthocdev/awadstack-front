@@ -9,7 +9,7 @@ import { createUrqlClient } from "../../utils/createUrqlClient";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { useChangePasswordMutation } from "../../generated/graphql";
 import { useRouter } from "next/router";
-import { simpleAlert } from "../../utils/alerts";
+import { simpleAlert } from "../../components/Alerts";
 
 const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
@@ -35,8 +35,10 @@ const ChangePassword: NextPage<{ token: string }> = () => {
               typeof router.query.token === "string" ? router.query.token : "",
           });
 
-          if (response.data?.changePassword.errors) {
-            const errorMap = toErrorMap(response.data.changePassword.errors);
+          if (response.data?.changePassword.fieldErrors) {
+            const errorMap = toErrorMap(
+              response.data.changePassword.fieldErrors
+            );
 
             if ("token" in errorMap) {
               setCustomError(errorMap.token);

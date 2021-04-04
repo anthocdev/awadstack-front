@@ -1,8 +1,11 @@
 fragment BasicUserResponse on UserResponse {
-  errors {
-    ...BasicError
+  fieldErrors {
+    ...BasicFieldError
   }
   user {
     ...BasicUser
+  }
+  alerts {
+    ...BasicResAlert
   }
 }
