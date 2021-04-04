@@ -21,6 +21,7 @@ import {
   useEditableControls,
   ButtonGroup,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import {
@@ -28,6 +29,7 @@ import {
   useLeaveRatingMutation,
   useUpdateCommentMutation,
 } from "../generated/graphql";
+import { NoticeType } from "../shared/models/resTypes";
 
 interface CommentProps {
   comment: {
@@ -90,6 +92,7 @@ export const Comment: React.FC<CommentProps> = ({
   removeFunc,
 }) => {
   const isOwner = comment.user.id === userId;
+  const toast = useToast();
   const EditControl = () => {
     const {
       isEditing,
@@ -141,9 +144,25 @@ export const Comment: React.FC<CommentProps> = ({
         <Editable
           colorScheme="twitter"
           defaultValue={comment.body}
-          onSubmit={async (value) =>
-            await updateFunc({ commentId: comment.id, body: value })
-          }
+          onSubmit={async (value) => {
+            const updated = await updateFunc({
+              commentId: comment.id,
+              body: value,
+            });
+            const resAlerts = updated.data?.updateComment.alerts;
+            if (resAlerts) {
+              resAlerts.map((alert) => {
+                toast({
+                  title: alert.title,
+                  status: alert.type as NoticeType,
+                  description: alert.message,
+                  position: "top",
+                  duration: 5000,
+                  isClosable: true,
+                });
+              });
+            }
+          }}
           submitOnBlur={false}
         >
           <Flex>

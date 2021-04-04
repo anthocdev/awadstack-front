@@ -1,13 +1,9 @@
-import gql from "graphql-tag";
-import * as Urql from "urql";
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -19,8 +15,8 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: "Query";
-  hello: Scalars["String"];
+  __typename?: 'Query';
+  hello: Scalars['String'];
   movies: PaginatedMovies;
   movie?: Maybe<Movie>;
   me?: Maybe<User>;
@@ -28,675 +24,693 @@ export type Query = {
   commment?: Maybe<UserComment>;
 };
 
+
 export type QueryMoviesArgs = {
-  cursor?: Maybe<Scalars["String"]>;
-  limit: Scalars["Int"];
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
+
 
 export type QueryMovieArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type QueryCommentsArgs = {
-  cursor?: Maybe<Scalars["String"]>;
-  limit: Scalars["Int"];
-  movieId: Scalars["Int"];
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  movieId: Scalars['Int'];
 };
 
+
 export type QueryCommmentArgs = {
-  id: Scalars["Float"];
+  id: Scalars['Float'];
 };
 
 export type PaginatedMovies = {
-  __typename?: "PaginatedMovies";
+  __typename?: 'PaginatedMovies';
   movies: Array<Movie>;
-  hasMore: Scalars["Boolean"];
+  hasMore: Scalars['Boolean'];
 };
 
 export type Movie = {
-  __typename?: "Movie";
-  id: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-  title: Scalars["String"];
-  year: Scalars["Float"];
-  description: Scalars["String"];
-  genre: Scalars["String"];
-  rating: Scalars["Float"];
-  imdbId: Scalars["String"];
-  imageLink: Scalars["String"];
+  __typename?: 'Movie';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  title: Scalars['String'];
+  year: Scalars['Float'];
+  description: Scalars['String'];
+  genre: Scalars['String'];
+  rating: Scalars['Float'];
+  imdbId: Scalars['String'];
+  imageLink: Scalars['String'];
 };
 
 export type User = {
-  __typename?: "User";
-  id: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-  avatarSvg: Scalars["String"];
-  email: Scalars["String"];
-  accessLevel: Scalars["Int"];
-  username: Scalars["String"];
+  __typename?: 'User';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  avatarSvg: Scalars['String'];
+  email: Scalars['String'];
+  accessLevel: Scalars['Int'];
+  username: Scalars['String'];
   comments?: Maybe<Array<UserComment>>;
   ratings?: Maybe<Array<UserRating>>;
 };
 
 export type UserComment = {
-  __typename?: "UserComment";
-  id: Scalars["Float"];
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
-  body: Scalars["String"];
-  likes?: Maybe<Scalars["Float"]>;
-  dislikes?: Maybe<Scalars["Float"]>;
-  userId: Scalars["Float"];
-  movieId: Scalars["Float"];
+  __typename?: 'UserComment';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  body: Scalars['String'];
+  likes?: Maybe<Scalars['Float']>;
+  dislikes?: Maybe<Scalars['Float']>;
+  userId: Scalars['Float'];
+  movieId: Scalars['Float'];
   user: User;
   movie: Movie;
 };
 
 export type UserRating = {
-  __typename?: "UserRating";
-  id: Scalars["Float"];
-  commentId: Scalars["Float"];
-  voterId: Scalars["Float"];
-  rating: Scalars["Boolean"];
+  __typename?: 'UserRating';
+  id: Scalars['Float'];
+  commentId: Scalars['Float'];
+  voterId: Scalars['Float'];
+  rating: Scalars['Boolean'];
   comment: UserComment;
-  createdAt: Scalars["String"];
-  updatedAt: Scalars["String"];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type PaginatedComments = {
-  __typename?: "PaginatedComments";
+  __typename?: 'PaginatedComments';
   comments: Array<UserComment>;
-  id: Scalars["Int"];
-  hasMore: Scalars["Boolean"];
+  id: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   createMovie: Movie;
   updateMovie?: Maybe<Movie>;
-  deleteMovie: Scalars["Boolean"];
+  deleteMovie: Scalars['Boolean'];
   changePassword: UserResponse;
-  forgotPassword: Scalars["Boolean"];
+  forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
-  logout: Scalars["Boolean"];
+  logout: Scalars['Boolean'];
   createComment?: Maybe<UserComment>;
   updateComment: CommentResponse;
-  deleteComment: Scalars["Boolean"];
-  leaveRating: RatingResponse;
+  deleteComment: Scalars['Boolean'];
+  leaveRating: CommentResponse;
 };
+
 
 export type MutationCreateMovieArgs = {
-  imdbId: Scalars["String"];
-  imageLink: Scalars["String"];
-  title: Scalars["String"];
+  imdbId: Scalars['String'];
+  imageLink: Scalars['String'];
+  title: Scalars['String'];
 };
+
 
 export type MutationUpdateMovieArgs = {
-  imdbId?: Maybe<Scalars["String"]>;
-  imageLink?: Maybe<Scalars["String"]>;
-  title?: Maybe<Scalars["String"]>;
-  id: Scalars["Float"];
+  imdbId?: Maybe<Scalars['String']>;
+  imageLink?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
 };
+
 
 export type MutationDeleteMovieArgs = {
-  id: Scalars["Float"];
+  id: Scalars['Float'];
 };
+
 
 export type MutationChangePasswordArgs = {
-  newPassword: Scalars["String"];
-  token: Scalars["String"];
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
+
 export type MutationForgotPasswordArgs = {
-  email: Scalars["String"];
+  email: Scalars['String'];
 };
+
 
 export type MutationRegisterArgs = {
   authinfo: UsernamePasswordInput;
 };
 
+
 export type MutationLoginArgs = {
-  password: Scalars["String"];
-  usernameOrEmail: Scalars["String"];
+  password: Scalars['String'];
+  usernameOrEmail: Scalars['String'];
 };
 
+
 export type MutationCreateCommentArgs = {
-  movieId: Scalars["Int"];
+  movieId: Scalars['Int'];
   input: CommentInput;
 };
+
 
 export type MutationUpdateCommentArgs = {
   input: CommentInput;
-  commentId: Scalars["Int"];
+  commentId: Scalars['Int'];
 };
+
 
 export type MutationDeleteCommentArgs = {
-  commentId: Scalars["Int"];
+  commentId: Scalars['Int'];
 };
 
+
 export type MutationLeaveRatingArgs = {
-  commentId: Scalars["Int"];
-  isLike: Scalars["Boolean"];
+  commentId: Scalars['Int'];
+  isLike: Scalars['Boolean'];
 };
 
 export type UserResponse = {
-  __typename?: "UserResponse";
+  __typename?: 'UserResponse';
   fieldErrors?: Maybe<Array<FieldError>>;
   alerts?: Maybe<Array<ResAlert>>;
   user?: Maybe<User>;
 };
 
 export type FieldError = {
-  __typename?: "FieldError";
-  field: Scalars["String"];
-  message: Scalars["String"];
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type ResAlert = {
-  __typename?: "ResAlert";
-  type: Scalars["String"];
-  title: Scalars["String"];
-  message: Scalars["String"];
+  __typename?: 'ResAlert';
+  type: Scalars['String'];
+  title: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type UsernamePasswordInput = {
-  username: Scalars["String"];
-  password: Scalars["String"];
-  email: Scalars["String"];
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type CommentInput = {
-  body: Scalars["String"];
+  body: Scalars['String'];
 };
 
 export type CommentResponse = {
-  __typename?: "CommentResponse";
+  __typename?: 'CommentResponse';
   updatedComment?: Maybe<UserComment>;
-  error?: Maybe<Scalars["Boolean"]>;
+  fieldErrors?: Maybe<Array<FieldError>>;
+  alerts?: Maybe<Array<ResAlert>>;
 };
 
-export type RatingResponse = {
-  __typename?: "RatingResponse";
-  updatedComment?: Maybe<UserComment>;
-  error?: Maybe<Scalars["Boolean"]>;
-};
+export type BasicCommentFragment = (
+  { __typename?: 'UserComment' }
+  & Pick<UserComment, 'id' | 'body' | 'likes' | 'dislikes' | 'userId' | 'movieId' | 'createdAt' | 'updatedAt'>
+  & { user: (
+    { __typename?: 'User' }
+    & BasicUserFragment
+  ) }
+);
 
-export type BasicCommentFragment = { __typename?: "UserComment" } & Pick<
-  UserComment,
-  | "id"
-  | "body"
-  | "likes"
-  | "dislikes"
-  | "userId"
-  | "movieId"
-  | "createdAt"
-  | "updatedAt"
-> & { user: { __typename?: "User" } & BasicUserFragment };
+export type BasicCommentResponseFragment = (
+  { __typename?: 'CommentResponse' }
+  & { updatedComment?: Maybe<(
+    { __typename?: 'UserComment' }
+    & Pick<UserComment, 'id' | 'body' | 'likes' | 'dislikes' | 'updatedAt'>
+  )>, fieldErrors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & BasicFieldErrorFragment
+  )>>, alerts?: Maybe<Array<(
+    { __typename?: 'ResAlert' }
+    & BasicResAlertFragment
+  )>> }
+);
 
-export type BasicFieldErrorFragment = { __typename?: "FieldError" } & Pick<
-  FieldError,
-  "field" | "message"
->;
+export type BasicFieldErrorFragment = (
+  { __typename?: 'FieldError' }
+  & Pick<FieldError, 'field' | 'message'>
+);
 
-export type BasicMovieFragment = { __typename?: "Movie" } & Pick<
-  Movie,
-  | "id"
-  | "title"
-  | "imdbId"
-  | "description"
-  | "imageLink"
-  | "rating"
-  | "genre"
-  | "year"
-  | "updatedAt"
-  | "createdAt"
->;
+export type BasicMovieFragment = (
+  { __typename?: 'Movie' }
+  & Pick<Movie, 'id' | 'title' | 'imdbId' | 'description' | 'imageLink' | 'rating' | 'genre' | 'year' | 'updatedAt' | 'createdAt'>
+);
 
-export type BasicResAlertFragment = { __typename?: "ResAlert" } & Pick<
-  ResAlert,
-  "type" | "title" | "message"
->;
+export type BasicResAlertFragment = (
+  { __typename?: 'ResAlert' }
+  & Pick<ResAlert, 'type' | 'title' | 'message'>
+);
 
-export type BasicUserFragment = { __typename?: "User" } & Pick<
-  User,
-  "id" | "accessLevel" | "username" | "avatarSvg"
->;
+export type BasicUserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'accessLevel' | 'username' | 'avatarSvg'>
+);
 
-export type BasicUserResponseFragment = { __typename?: "UserResponse" } & {
-  fieldErrors?: Maybe<
-    Array<{ __typename?: "FieldError" } & BasicFieldErrorFragment>
-  >;
-  user?: Maybe<{ __typename?: "User" } & BasicUserFragment>;
-  alerts?: Maybe<Array<{ __typename?: "ResAlert" } & BasicResAlertFragment>>;
-};
+export type BasicUserResponseFragment = (
+  { __typename?: 'UserResponse' }
+  & { fieldErrors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & BasicFieldErrorFragment
+  )>>, user?: Maybe<(
+    { __typename?: 'User' }
+    & BasicUserFragment
+  )>, alerts?: Maybe<Array<(
+    { __typename?: 'ResAlert' }
+    & BasicResAlertFragment
+  )>> }
+);
 
 export type ChangePasswordMutationVariables = Exact<{
-  token: Scalars["String"];
-  newPassword: Scalars["String"];
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
 }>;
 
-export type ChangePasswordMutation = { __typename?: "Mutation" } & {
-  changePassword: { __typename?: "UserResponse" } & BasicUserResponseFragment;
-};
+
+export type ChangePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { changePassword: (
+    { __typename?: 'UserResponse' }
+    & BasicUserResponseFragment
+  ) }
+);
 
 export type CreateCommentMutationVariables = Exact<{
-  body: Scalars["String"];
-  movieId: Scalars["Int"];
+  body: Scalars['String'];
+  movieId: Scalars['Int'];
 }>;
 
-export type CreateCommentMutation = { __typename?: "Mutation" } & {
-  createComment?: Maybe<{ __typename?: "UserComment" } & BasicCommentFragment>;
-};
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment?: Maybe<(
+    { __typename?: 'UserComment' }
+    & BasicCommentFragment
+  )> }
+);
 
 export type CreateMovieMutationVariables = Exact<{
-  title: Scalars["String"];
-  imdbId: Scalars["String"];
-  imageLink: Scalars["String"];
+  title: Scalars['String'];
+  imdbId: Scalars['String'];
+  imageLink: Scalars['String'];
 }>;
 
-export type CreateMovieMutation = { __typename?: "Mutation" } & {
-  createMovie: { __typename?: "Movie" } & BasicMovieFragment;
-};
+
+export type CreateMovieMutation = (
+  { __typename?: 'Mutation' }
+  & { createMovie: (
+    { __typename?: 'Movie' }
+    & BasicMovieFragment
+  ) }
+);
 
 export type ForgotPasswordMutationVariables = Exact<{
-  email: Scalars["String"];
+  email: Scalars['String'];
 }>;
 
-export type ForgotPasswordMutation = { __typename?: "Mutation" } & Pick<
-  Mutation,
-  "forgotPassword"
->;
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'forgotPassword'>
+);
 
 export type LeaveRatingMutationVariables = Exact<{
-  commentId: Scalars["Int"];
-  isLike: Scalars["Boolean"];
+  commentId: Scalars['Int'];
+  isLike: Scalars['Boolean'];
 }>;
 
-export type LeaveRatingMutation = { __typename?: "Mutation" } & {
-  leaveRating: { __typename?: "RatingResponse" } & Pick<
-    RatingResponse,
-    "error"
-  > & {
-      updatedComment?: Maybe<
-        { __typename?: "UserComment" } & Pick<
-          UserComment,
-          "id" | "likes" | "dislikes"
-        >
-      >;
-    };
-};
+
+export type LeaveRatingMutation = (
+  { __typename?: 'Mutation' }
+  & { leaveRating: (
+    { __typename?: 'CommentResponse' }
+    & BasicCommentResponseFragment
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
-  usernameOrEmail: Scalars["String"];
-  password: Scalars["String"];
+  usernameOrEmail: Scalars['String'];
+  password: Scalars['String'];
 }>;
 
-export type LoginMutation = { __typename?: "Mutation" } & {
-  login: { __typename?: "UserResponse" } & BasicUserResponseFragment;
-};
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & BasicUserResponseFragment
+  ) }
+);
 
-export type LogoutMutation = { __typename?: "Mutation" } & Pick<
-  Mutation,
-  "logout"
->;
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
 
 export type RegisterMutationVariables = Exact<{
-  username: Scalars["String"];
-  password: Scalars["String"];
-  email: Scalars["String"];
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email: Scalars['String'];
 }>;
 
-export type RegisterMutation = { __typename?: "Mutation" } & {
-  register: { __typename?: "UserResponse" } & BasicUserResponseFragment;
-};
+
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & BasicUserResponseFragment
+  ) }
+);
 
 export type DeleteCommentMutationVariables = Exact<{
-  commentId: Scalars["Int"];
+  commentId: Scalars['Int'];
 }>;
 
-export type DeleteCommentMutation = { __typename?: "Mutation" } & Pick<
-  Mutation,
-  "deleteComment"
->;
+
+export type DeleteCommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteComment'>
+);
 
 export type UpdateCommentMutationVariables = Exact<{
-  commentId: Scalars["Int"];
-  body: Scalars["String"];
+  commentId: Scalars['Int'];
+  body: Scalars['String'];
 }>;
 
-export type UpdateCommentMutation = { __typename?: "Mutation" } & {
-  updateComment: { __typename?: "CommentResponse" } & Pick<
-    CommentResponse,
-    "error"
-  > & {
-      updatedComment?: Maybe<
-        { __typename?: "UserComment" } & Pick<
-          UserComment,
-          "id" | "body" | "likes" | "dislikes" | "updatedAt"
-        >
-      >;
-    };
-};
+
+export type UpdateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateComment: (
+    { __typename?: 'CommentResponse' }
+    & BasicCommentResponseFragment
+  ) }
+);
 
 export type CommentsQueryVariables = Exact<{
-  movieId: Scalars["Int"];
-  limit: Scalars["Int"];
-  cursor?: Maybe<Scalars["String"]>;
+  movieId: Scalars['Int'];
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
 }>;
 
-export type CommentsQuery = { __typename?: "Query" } & {
-  comments: { __typename?: "PaginatedComments" } & Pick<
-    PaginatedComments,
-    "hasMore" | "id"
-  > & {
-      comments: Array<{ __typename?: "UserComment" } & BasicCommentFragment>;
-    };
-};
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
+export type CommentsQuery = (
+  { __typename?: 'Query' }
+  & { comments: (
+    { __typename?: 'PaginatedComments' }
+    & Pick<PaginatedComments, 'hasMore' | 'id'>
+    & { comments: Array<(
+      { __typename?: 'UserComment' }
+      & BasicCommentFragment
+    )> }
+  ) }
+);
 
-export type MeQuery = { __typename?: "Query" } & {
-  me?: Maybe<{ __typename?: "User" } & BasicUserFragment>;
-};
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & BasicUserFragment
+  )> }
+);
 
 export type MovieQueryVariables = Exact<{
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 }>;
 
-export type MovieQuery = { __typename?: "Query" } & {
-  movie?: Maybe<{ __typename?: "Movie" } & BasicMovieFragment>;
-};
+
+export type MovieQuery = (
+  { __typename?: 'Query' }
+  & { movie?: Maybe<(
+    { __typename?: 'Movie' }
+    & BasicMovieFragment
+  )> }
+);
 
 export type MoviesQueryVariables = Exact<{
-  limit: Scalars["Int"];
-  cursor?: Maybe<Scalars["String"]>;
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
 }>;
 
-export type MoviesQuery = { __typename?: "Query" } & {
-  movies: { __typename?: "PaginatedMovies" } & Pick<
-    PaginatedMovies,
-    "hasMore"
-  > & { movies: Array<{ __typename?: "Movie" } & BasicMovieFragment> };
-};
+
+export type MoviesQuery = (
+  { __typename?: 'Query' }
+  & { movies: (
+    { __typename?: 'PaginatedMovies' }
+    & Pick<PaginatedMovies, 'hasMore'>
+    & { movies: Array<(
+      { __typename?: 'Movie' }
+      & BasicMovieFragment
+    )> }
+  ) }
+);
 
 export const BasicUserFragmentDoc = gql`
-  fragment BasicUser on User {
-    id
-    accessLevel
-    username
-    avatarSvg
-  }
-`;
+    fragment BasicUser on User {
+  id
+  accessLevel
+  username
+  avatarSvg
+}
+    `;
 export const BasicCommentFragmentDoc = gql`
-  fragment BasicComment on UserComment {
+    fragment BasicComment on UserComment {
+  id
+  body
+  likes
+  dislikes
+  userId
+  movieId
+  createdAt
+  updatedAt
+  user {
+    ...BasicUser
+  }
+}
+    ${BasicUserFragmentDoc}`;
+export const BasicFieldErrorFragmentDoc = gql`
+    fragment BasicFieldError on FieldError {
+  field
+  message
+}
+    `;
+export const BasicResAlertFragmentDoc = gql`
+    fragment BasicResAlert on ResAlert {
+  type
+  title
+  message
+}
+    `;
+export const BasicCommentResponseFragmentDoc = gql`
+    fragment BasicCommentResponse on CommentResponse {
+  updatedComment {
     id
     body
     likes
     dislikes
-    userId
-    movieId
-    createdAt
     updatedAt
-    user {
-      ...BasicUser
-    }
   }
-  ${BasicUserFragmentDoc}
-`;
+  fieldErrors {
+    ...BasicFieldError
+  }
+  alerts {
+    ...BasicResAlert
+  }
+}
+    ${BasicFieldErrorFragmentDoc}
+${BasicResAlertFragmentDoc}`;
 export const BasicMovieFragmentDoc = gql`
-  fragment BasicMovie on Movie {
-    id
-    title
-    imdbId
-    description
-    imageLink
-    rating
-    genre
-    year
-    updatedAt
-    createdAt
-  }
-`;
-export const BasicFieldErrorFragmentDoc = gql`
-  fragment BasicFieldError on FieldError {
-    field
-    message
-  }
-`;
-export const BasicResAlertFragmentDoc = gql`
-  fragment BasicResAlert on ResAlert {
-    type
-    title
-    message
-  }
-`;
+    fragment BasicMovie on Movie {
+  id
+  title
+  imdbId
+  description
+  imageLink
+  rating
+  genre
+  year
+  updatedAt
+  createdAt
+}
+    `;
 export const BasicUserResponseFragmentDoc = gql`
-  fragment BasicUserResponse on UserResponse {
-    fieldErrors {
-      ...BasicFieldError
-    }
-    user {
-      ...BasicUser
-    }
-    alerts {
-      ...BasicResAlert
-    }
+    fragment BasicUserResponse on UserResponse {
+  fieldErrors {
+    ...BasicFieldError
   }
-  ${BasicFieldErrorFragmentDoc}
-  ${BasicUserFragmentDoc}
-  ${BasicResAlertFragmentDoc}
-`;
+  user {
+    ...BasicUser
+  }
+  alerts {
+    ...BasicResAlert
+  }
+}
+    ${BasicFieldErrorFragmentDoc}
+${BasicUserFragmentDoc}
+${BasicResAlertFragmentDoc}`;
 export const ChangePasswordDocument = gql`
-  mutation ChangePassword($token: String!, $newPassword: String!) {
-    changePassword(token: $token, newPassword: $newPassword) {
-      ...BasicUserResponse
-    }
+    mutation ChangePassword($token: String!, $newPassword: String!) {
+  changePassword(token: $token, newPassword: $newPassword) {
+    ...BasicUserResponse
   }
-  ${BasicUserResponseFragmentDoc}
-`;
+}
+    ${BasicUserResponseFragmentDoc}`;
 
 export function useChangePasswordMutation() {
-  return Urql.useMutation<
-    ChangePasswordMutation,
-    ChangePasswordMutationVariables
-  >(ChangePasswordDocument);
-}
+  return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
 export const CreateCommentDocument = gql`
-  mutation CreateComment($body: String!, $movieId: Int!) {
-    createComment(movieId: $movieId, input: { body: $body }) {
-      ...BasicComment
-    }
+    mutation CreateComment($body: String!, $movieId: Int!) {
+  createComment(movieId: $movieId, input: {body: $body}) {
+    ...BasicComment
   }
-  ${BasicCommentFragmentDoc}
-`;
+}
+    ${BasicCommentFragmentDoc}`;
 
 export function useCreateCommentMutation() {
-  return Urql.useMutation<
-    CreateCommentMutation,
-    CreateCommentMutationVariables
-  >(CreateCommentDocument);
-}
+  return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
+};
 export const CreateMovieDocument = gql`
-  mutation CreateMovie($title: String!, $imdbId: String!, $imageLink: String!) {
-    createMovie(title: $title, imdbId: $imdbId, imageLink: $imageLink) {
-      ...BasicMovie
-    }
+    mutation CreateMovie($title: String!, $imdbId: String!, $imageLink: String!) {
+  createMovie(title: $title, imdbId: $imdbId, imageLink: $imageLink) {
+    ...BasicMovie
   }
-  ${BasicMovieFragmentDoc}
-`;
+}
+    ${BasicMovieFragmentDoc}`;
 
 export function useCreateMovieMutation() {
-  return Urql.useMutation<CreateMovieMutation, CreateMovieMutationVariables>(
-    CreateMovieDocument
-  );
-}
+  return Urql.useMutation<CreateMovieMutation, CreateMovieMutationVariables>(CreateMovieDocument);
+};
 export const ForgotPasswordDocument = gql`
-  mutation ForgotPassword($email: String!) {
-    forgotPassword(email: $email)
-  }
-`;
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
 
 export function useForgotPasswordMutation() {
-  return Urql.useMutation<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >(ForgotPasswordDocument);
-}
+  return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
+};
 export const LeaveRatingDocument = gql`
-  mutation LeaveRating($commentId: Int!, $isLike: Boolean!) {
-    leaveRating(commentId: $commentId, isLike: $isLike) {
-      updatedComment {
-        id
-        likes
-        dislikes
-      }
-      error
-    }
+    mutation LeaveRating($commentId: Int!, $isLike: Boolean!) {
+  leaveRating(commentId: $commentId, isLike: $isLike) {
+    ...BasicCommentResponse
   }
-`;
+}
+    ${BasicCommentResponseFragmentDoc}`;
 
 export function useLeaveRatingMutation() {
-  return Urql.useMutation<LeaveRatingMutation, LeaveRatingMutationVariables>(
-    LeaveRatingDocument
-  );
-}
+  return Urql.useMutation<LeaveRatingMutation, LeaveRatingMutationVariables>(LeaveRatingDocument);
+};
 export const LoginDocument = gql`
-  mutation Login($usernameOrEmail: String!, $password: String!) {
-    login(usernameOrEmail: $usernameOrEmail, password: $password) {
-      ...BasicUserResponse
-    }
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(usernameOrEmail: $usernameOrEmail, password: $password) {
+    ...BasicUserResponse
   }
-  ${BasicUserResponseFragmentDoc}
-`;
+}
+    ${BasicUserResponseFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
-}
+};
 export const LogoutDocument = gql`
-  mutation Logout {
-    logout
-  }
-`;
+    mutation Logout {
+  logout
+}
+    `;
 
 export function useLogoutMutation() {
-  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(
-    LogoutDocument
-  );
-}
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
+};
 export const RegisterDocument = gql`
-  mutation Register($username: String!, $password: String!, $email: String!) {
-    register(
-      authinfo: { username: $username, password: $password, email: $email }
-    ) {
-      ...BasicUserResponse
-    }
+    mutation Register($username: String!, $password: String!, $email: String!) {
+  register(authinfo: {username: $username, password: $password, email: $email}) {
+    ...BasicUserResponse
   }
-  ${BasicUserResponseFragmentDoc}
-`;
+}
+    ${BasicUserResponseFragmentDoc}`;
 
 export function useRegisterMutation() {
-  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(
-    RegisterDocument
-  );
-}
+  return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
 export const DeleteCommentDocument = gql`
-  mutation DeleteComment($commentId: Int!) {
-    deleteComment(commentId: $commentId)
-  }
-`;
+    mutation DeleteComment($commentId: Int!) {
+  deleteComment(commentId: $commentId)
+}
+    `;
 
 export function useDeleteCommentMutation() {
-  return Urql.useMutation<
-    DeleteCommentMutation,
-    DeleteCommentMutationVariables
-  >(DeleteCommentDocument);
-}
+  return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
+};
 export const UpdateCommentDocument = gql`
-  mutation UpdateComment($commentId: Int!, $body: String!) {
-    updateComment(commentId: $commentId, input: { body: $body }) {
-      updatedComment {
-        id
-        body
-        likes
-        dislikes
-        updatedAt
-      }
-      error
-    }
+    mutation UpdateComment($commentId: Int!, $body: String!) {
+  updateComment(commentId: $commentId, input: {body: $body}) {
+    ...BasicCommentResponse
   }
-`;
+}
+    ${BasicCommentResponseFragmentDoc}`;
 
 export function useUpdateCommentMutation() {
-  return Urql.useMutation<
-    UpdateCommentMutation,
-    UpdateCommentMutationVariables
-  >(UpdateCommentDocument);
-}
+  return Urql.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument);
+};
 export const CommentsDocument = gql`
-  query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
-    comments(movieId: $movieId, limit: $limit, cursor: $cursor) {
-      comments {
-        ...BasicComment
-      }
-      hasMore
-      id
+    query Comments($movieId: Int!, $limit: Int!, $cursor: String) {
+  comments(movieId: $movieId, limit: $limit, cursor: $cursor) {
+    comments {
+      ...BasicComment
     }
+    hasMore
+    id
   }
-  ${BasicCommentFragmentDoc}
-`;
+}
+    ${BasicCommentFragmentDoc}`;
 
-export function useCommentsQuery(
-  options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, "query"> = {}
-) {
+export function useCommentsQuery(options: Omit<Urql.UseQueryArgs<CommentsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CommentsQuery>({ query: CommentsDocument, ...options });
-}
+};
 export const MeDocument = gql`
-  query Me {
-    me {
-      ...BasicUser
-    }
+    query Me {
+  me {
+    ...BasicUser
   }
-  ${BasicUserFragmentDoc}
-`;
-
-export function useMeQuery(
-  options: Omit<Urql.UseQueryArgs<MeQueryVariables>, "query"> = {}
-) {
-  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 }
+    ${BasicUserFragmentDoc}`;
+
+export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
 export const MovieDocument = gql`
-  query Movie($id: Int!) {
-    movie(id: $id) {
+    query Movie($id: Int!) {
+  movie(id: $id) {
+    ...BasicMovie
+  }
+}
+    ${BasicMovieFragmentDoc}`;
+
+export function useMovieQuery(options: Omit<Urql.UseQueryArgs<MovieQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MovieQuery>({ query: MovieDocument, ...options });
+};
+export const MoviesDocument = gql`
+    query Movies($limit: Int!, $cursor: String) {
+  movies(limit: $limit, cursor: $cursor) {
+    hasMore
+    movies {
       ...BasicMovie
     }
   }
-  ${BasicMovieFragmentDoc}
-`;
-
-export function useMovieQuery(
-  options: Omit<Urql.UseQueryArgs<MovieQueryVariables>, "query"> = {}
-) {
-  return Urql.useQuery<MovieQuery>({ query: MovieDocument, ...options });
 }
-export const MoviesDocument = gql`
-  query Movies($limit: Int!, $cursor: String) {
-    movies(limit: $limit, cursor: $cursor) {
-      hasMore
-      movies {
-        ...BasicMovie
-      }
-    }
-  }
-  ${BasicMovieFragmentDoc}
-`;
+    ${BasicMovieFragmentDoc}`;
 
-export function useMoviesQuery(
-  options: Omit<Urql.UseQueryArgs<MoviesQueryVariables>, "query"> = {}
-) {
+export function useMoviesQuery(options: Omit<Urql.UseQueryArgs<MoviesQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MoviesQuery>({ query: MoviesDocument, ...options });
-}
+};

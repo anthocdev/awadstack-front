@@ -1,12 +1,5 @@
 mutation UpdateComment($commentId: Int!, $body: String!) {
   updateComment(commentId: $commentId, input: { body: $body }) {
-    updatedComment {
-      id
-      body
-      likes
-      dislikes
-      updatedAt
-    }
-    error
+    ...BasicCommentResponse
   }
 }

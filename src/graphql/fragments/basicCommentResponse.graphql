@@ -1,0 +1,15 @@
+fragment BasicCommentResponse on CommentResponse {
+  updatedComment {
+    id
+    body
+    likes
+    dislikes
+    updatedAt
+  }
+  fieldErrors {
+    ...BasicFieldError
+  }
+  alerts {
+    ...BasicResAlert
+  }
+}

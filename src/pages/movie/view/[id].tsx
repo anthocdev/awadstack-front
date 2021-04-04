@@ -20,7 +20,6 @@ import {
   Stack,
   useColorModeValue,
   Heading,
-  StackDivider,
   Icon,
   Flex,
   Text,
@@ -69,7 +68,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
   });
 
   const intId =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+    typeof router.query.id === "string" ? parseInt(router.query.id) : -0;
   //Comment pagination variables
   const [variables, setVariables] = useState({
     limit: 10,
@@ -87,6 +86,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
   const [
     { data: commentsData, fetching: commentsFetching, error: commentsError },
   ] = useCommentsQuery({
+    pause: intId === -1,
     variables,
   });
 
@@ -155,7 +155,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
       {/* Comment Container */}
       <Container maxW={"4xl"} py={12}>
         <Heading>Comments</Heading>
-        {!commentsData?.comments.comments.length && !commentsFetching ? (
+        {!commentsData?.comments?.comments?.length && !commentsFetching ? (
           <Container mt={6}>No comments available.</Container>
         ) : (
           commentsData?.comments.comments.map((comment: any) => {
@@ -240,4 +240,4 @@ const MovieDisp: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(MovieDisp);
+export default withUrqlClient(createUrqlClient)(MovieDisp);
