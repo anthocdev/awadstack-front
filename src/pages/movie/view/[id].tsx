@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../../utils/createUrqlClient";
@@ -68,8 +68,13 @@ const MovieDisp: React.FC<{}> = ({}) => {
   });
 
   const intId =
-    typeof router.query.id === "string" ? parseInt(router.query.id) : -0;
-  //Comment pagination variables
+    typeof router.query.id === "string" ? parseInt(router.query.id) : -1;
+  /* Updating variables when the router can get id query */
+  useEffect(() => {
+    if (!router.isReady) return;
+    setVariables({ ...variables, movieId: intId });
+  }, [router.isReady]);
+
   const [variables, setVariables] = useState({
     limit: 10,
     cursor: null as null | string,
@@ -159,7 +164,7 @@ const MovieDisp: React.FC<{}> = ({}) => {
           <Container mt={6}>No comments available.</Container>
         ) : (
           commentsData?.comments.comments.map((comment: any) => {
-            if (comment.movieId === variables.movieId) {
+            if (comment.movieId === intId) {
               {
                 /* @Todo: more optimal query for matching movieId (cache) */
               }

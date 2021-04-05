@@ -149,6 +149,7 @@ export const Comment: React.FC<CommentProps> = ({
               commentId: comment.id,
               body: value,
             });
+            /* Alerts */
             const resAlerts = updated.data?.updateComment.alerts;
             if (resAlerts) {
               resAlerts.map((alert) => {
